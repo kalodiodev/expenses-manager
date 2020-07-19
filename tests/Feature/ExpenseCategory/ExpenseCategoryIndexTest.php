@@ -4,6 +4,7 @@ namespace Tests\Feature\ExpenseCategory;
 
 use App\User;
 use Tests\TestCase;
+use App\ExpenseCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExpenseCategoryIndexTest extends TestCase
@@ -25,5 +26,16 @@ class ExpenseCategoryIndexTest extends TestCase
     {
         $this->get(route('expense.categories'))
             ->assertRedirect(route('login'));
+    }
+
+    /** @test */
+    public function an_ajax_request_returns_categories_json()
+    {
+        $this->actingAs(factory(User::class)->create());
+
+        factory(ExpenseCategory::class)->create();
+
+        $this->get(route('expense.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJsonCount(1, 'data');
     }
 }

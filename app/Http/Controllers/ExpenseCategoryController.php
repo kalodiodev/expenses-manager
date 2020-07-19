@@ -14,6 +14,10 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
+        if (\request()->ajax()) {
+            return ExpenseCategory::paginate(40);
+        }
+
         return view('expense-category.index')->with([
             'categories' => ExpenseCategory::paginate(40)
         ]);
