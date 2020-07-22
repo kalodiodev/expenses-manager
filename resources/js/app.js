@@ -10,9 +10,9 @@ window.Vue = require('vue');
 
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import router from './router'
 
 Vue.use(Vuetify)
-
 const vuetify = new Vuetify({})
 
 /**
@@ -37,5 +37,6 @@ Vue.component('manager-app', require('./App.vue').default);
 
 const app = new Vue({
     el: '#app',
+    router,
     vuetify
 });
