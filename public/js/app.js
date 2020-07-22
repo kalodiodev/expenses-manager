@@ -2097,6 +2097,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2149,9 +2150,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     close: function close() {
       this.dialog = false;
+      this.editedItem = '';
     },
-    save: function save() {},
+    save: function save() {
+      this.close();
+    },
     editItem: function editItem(item) {
+      this.editedItem = item;
+      this.dialog = true;
+      this.formTitle = 'Edit Category';
       console.log(item);
     },
     deleteItem: function deleteItem(item) {
@@ -38586,6 +38593,12 @@ var render = function() {
                                                 attrs: {
                                                   color: "primary",
                                                   dark: ""
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.formTitle =
+                                                      "New Category"
+                                                  }
                                                 }
                                               },
                                               "v-btn",

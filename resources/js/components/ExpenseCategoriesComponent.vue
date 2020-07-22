@@ -25,6 +25,7 @@
                                         class="mb-2"
                                         v-bind="attrs"
                                         v-on="on"
+                                        @click="formTitle = 'New Category'"
                                     >New Item</v-btn>
                                 </template>
                                 <v-card>
@@ -153,11 +154,15 @@
             },
             close: function () {
                 this.dialog = false
+                this.editedItem = '';
             },
             save: function () {
-
+                this.close();
             },
             editItem: function (item) {
+                this.editedItem = item;
+                this.dialog = true;
+                this.formTitle = 'Edit Category';
                 console.log(item)
             },
             deleteItem: function (item) {
