@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\ExpenseCategory;
 use Illuminate\Http\Request;
 
 class ExpenseCategoryController extends Controller
@@ -14,12 +13,14 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
+        $categories = auth()->user()->expenseCategories()->paginate();
+
         if (\request()->ajax()) {
-            return ExpenseCategory::paginate(10);
+            return $categories;
         }
 
         return view('expense-category.index')->with([
-            'categories' => ExpenseCategory::paginate(20)
+            'categories' => $categories
         ]);
     }
 }

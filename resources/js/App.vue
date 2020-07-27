@@ -29,7 +29,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="light-blue" light>
+        <v-app-bar app color="blue" light>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>Expenses Manager</v-toolbar-title>
         </v-app-bar>
@@ -37,7 +37,7 @@
         <v-main class="fill-height">
             <router-view></router-view>
         </v-main>
-        <v-footer color="light-blue" app light>
+        <v-footer color="blue" app light>
             <span class="white--text">&copy; TNS-DEVELOPMENT</span>
         </v-footer>
     </v-app>

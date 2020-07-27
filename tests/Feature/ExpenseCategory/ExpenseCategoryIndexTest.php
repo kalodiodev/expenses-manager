@@ -29,13 +29,26 @@ class ExpenseCategoryIndexTest extends TestCase
     }
 
     /** @test */
-    public function an_ajax_request_returns_categories_json()
+    public function an_authenticated_user_can_index_own_categories_json()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->actingAs($user = factory(User::class)->create());
 
-        factory(ExpenseCategory::class)->create();
+        factory(ExpenseCategory::class)->create(['user_id' => $user->id]);
 
         $this->get(route('expense.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
             ->assertJsonCount(1, 'data');
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_index_others_categories()
+    {
+        $this->actingAs(factory(User::class)->create());
+
+        factory(ExpenseCategory::class)->create([
+            'user_id' => factory(User::class)->create()->id
+        ]);
+
+        $this->get(route('expense.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJsonCount(0, 'data');
     }
 }

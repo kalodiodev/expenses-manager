@@ -38447,7 +38447,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-app-bar",
-        { attrs: { app: "", color: "light-blue", light: "" } },
+        { attrs: { app: "", color: "blue", light: "" } },
         [
           _c("v-app-bar-nav-icon", {
             on: {
@@ -38465,7 +38465,7 @@ var render = function() {
       _vm._v(" "),
       _c("v-main", { staticClass: "fill-height" }, [_c("router-view")], 1),
       _vm._v(" "),
-      _c("v-footer", { attrs: { color: "light-blue", app: "", light: "" } }, [
+      _c("v-footer", { attrs: { color: "blue", app: "", light: "" } }, [
         _c("span", { staticClass: "white--text" }, [
           _vm._v("© TNS-DEVELOPMENT")
         ])
