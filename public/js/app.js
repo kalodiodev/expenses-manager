@@ -2206,7 +2206,14 @@ __webpack_require__.r(__webpack_exports__);
     save: function save(item) {
       var _this2 = this;
 
-      if (this.editedIndex > -1) {}
+      if (this.editedIndex > -1) {
+        axios.patch('/expense-categories/' + item.id, {
+          'name': item.name,
+          'description': item.description
+        }).then(function (res) {
+          _this2.categories[_this2.editedIndex] = res.data.data;
+        })["catch"](function (err) {});
+      }
 
       axios.post('/expense-categories', {
         'name': item.name,
@@ -38570,7 +38577,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { value: _vm.dialog, "max-width": "500px" },
+      attrs: { value: _vm.dialog, "max-width": "500px", persistent: "" },
       scopedSlots: _vm._u([
         {
           key: "activator",

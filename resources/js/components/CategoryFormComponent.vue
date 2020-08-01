@@ -1,5 +1,5 @@
 <template>
-    <v-dialog :value="dialog" max-width="500px">
+    <v-dialog :value="dialog" max-width="500px" persistent>
         <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" @click="newDialog">{{ newBtn }}</v-btn>
         </template>

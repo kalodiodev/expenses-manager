@@ -138,7 +138,16 @@
             },
             save: function (item) {
                 if (this.editedIndex > -1) {
+                    axios.patch('/expense-categories/' + item.id, {
+                        'name': item.name,
+                        'description': item.description
+                    })
+                        .then(res => {
+                            this.categories[this.editedIndex] = res.data.data
+                        })
+                        .catch(err => {
 
+                        })
                 }
 
                 axios.post('/expense-categories', {

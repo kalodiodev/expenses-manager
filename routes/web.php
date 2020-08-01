@@ -24,4 +24,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/expense-categories', 'ExpenseCategoryController@index')->name('expense.categories');
     Route::post('/expense-categories', 'ExpenseCategoryController@store');
+    Route::patch('/expense-categories/{category}', 'ExpenseCategoryController@update')->name('expense.category');
 });

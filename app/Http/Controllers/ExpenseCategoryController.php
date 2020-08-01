@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ExpenseCategory;
 use Illuminate\Http\Request;
 
 class ExpenseCategoryController extends Controller
@@ -35,5 +36,19 @@ class ExpenseCategoryController extends Controller
         return auth()->user()
             ->expenseCategories()
             ->create($request->only(['name', 'description']));
+    }
+
+    /**
+     * Update Category
+     *
+     * @param ExpenseCategory $category
+     * @param Request $request
+     * @return ExpenseCategory
+     */
+    public function update(ExpenseCategory $category, Request $request)
+    {
+        $category->update($request->only(['name', 'description']));
+
+        return $category;
     }
 }
