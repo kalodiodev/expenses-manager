@@ -23,4 +23,17 @@ class ExpenseCategoryController extends Controller
             'categories' => $categories
         ]);
     }
+
+    /**
+     * Store category
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function store(Request $request)
+    {
+        return auth()->user()
+            ->expenseCategories()
+            ->create($request->only(['name', 'description']));
+    }
 }

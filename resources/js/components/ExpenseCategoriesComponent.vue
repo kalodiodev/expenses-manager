@@ -17,42 +17,14 @@
 
                             <v-spacer></v-spacer>
 
-                            <v-dialog v-model="dialog" max-width="500px">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                        color="primary"
-                                        dark
-                                        class="mb-2"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        @click="formTitle = 'New Category'"
-                                    >New Item</v-btn>
-                                </template>
-                                <v-card>
-                                    <v-card-title>
-                                        <span class="headline">{{ formTitle }}</span>
-                                    </v-card-title>
-
-                                    <v-card-text>
-                                        <v-container>
-                                            <v-col>
-                                                <v-col>
-                                                    <v-text-field v-model="editedItem.name" label="Category Name"></v-text-field>
-                                                </v-col>
-                                                <v-col>
-                                                    <v-textarea v-model="editedItem.description" label="Description"></v-textarea>
-                                                </v-col>
-                                            </v-col>
-                                        </v-container>
-                                    </v-card-text>
-
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                        <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
+                            <category-form-component
+                                :dialog="dialog"
+                                :editedItem="editedItem"
+                                :title="dialogTitle"
+                                :newBtn="'New Category'"
+                                @new-dialog="newCategory"
+                                @save-dialog="save($event)"
+                                @close-dialog="close"></category-form-component>
                         </v-toolbar>
 
                         <v-container>
@@ -102,12 +74,19 @@
 </template>
 
 <script>
+    import CategoryFormComponent from "./CategoryFormComponent";
+
     export default {
+        components: {
+            CategoryFormComponent
+        },
         data() {
             return {
                 dialog: false,
-                formTitle: '',
-                editedItem: '',
+                dialogTitle: '',
+
+                editedItem: {},
+                editedIndex: -1,
 
                 page: 1,
                 totalPages: 1,
@@ -154,16 +133,40 @@
             },
             close: function () {
                 this.dialog = false
-                this.editedItem = '';
+                this.editedItem = {};
+                this.editedIndex = -1;
             },
-            save: function () {
-                this.close();
+            save: function (item) {
+                if (this.editedIndex > -1) {
+
+                }
+
+                axios.post('/expense-categories', {
+                    'name': item.name,
+                    'description': item.description
+                })
+                    .then(res => {
+                        this.fetchCategories(this.page)
+                        this.close();
+                    })
+                    .catch(err => {
+
+                    })
+            },
+            newCategory: function () {
+                this.dialogTitle = 'New Category';
+                this.editedIndex = -1;
+                this.editedItem = {
+                    name: '',
+                    description: ''
+                };
+                this.dialog = true;
             },
             editItem: function (item) {
-                this.editedItem = item;
+                this.editedIndex = this.categories.indexOf(item)
+                this.editedItem = Object.assign({}, item)
                 this.dialog = true;
-                this.formTitle = 'Edit Category';
-                console.log(item)
+                this.dialogTitle = 'Edit Category';
             },
             deleteItem: function (item) {
                 console.log(item)
