@@ -43,4 +43,22 @@ class ExpenseCategoryController extends Controller
 
         return $category;
     }
+
+    /**
+     * Delete Category
+     *
+     * @param ExpenseCategory $category
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(ExpenseCategory $category)
+    {
+        if ($category->user->id != auth()->user()->id) {
+            abort(404, 'Expense category not found.');
+        }
+
+        $category->delete();
+
+        return response()->noContent();
+    }
 }

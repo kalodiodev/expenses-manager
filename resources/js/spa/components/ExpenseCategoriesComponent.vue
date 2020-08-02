@@ -178,7 +178,13 @@
                 this.dialogTitle = 'Edit Category';
             },
             deleteItem: function (item) {
-                console.log(item)
+                axios.delete('/expense-categories/' + item.id)
+                    .then(res => {
+                        this.fetchCategories(this.page)
+                    })
+                    .catch(err => {
+
+                    })
             }
         }
     }

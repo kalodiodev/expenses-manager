@@ -2325,7 +2325,11 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogTitle = 'Edit Category';
     },
     deleteItem: function deleteItem(item) {
-      console.log(item);
+      var _this3 = this;
+
+      axios["delete"]('/expense-categories/' + item.id).then(function (res) {
+        _this3.fetchCategories(_this3.page);
+      })["catch"](function (err) {});
     }
   }
 });
