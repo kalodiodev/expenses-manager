@@ -3,18 +3,15 @@
 namespace Tests\Feature\ExpenseCategory;
 
 use App\User;
-use Tests\TestCase;
 use App\ExpenseCategory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\IntegrationTestCase;
 
-class ExpenseCategoryIndexTest extends TestCase
+class ExpenseCategoryIndexTest extends IntegrationTestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function an_authenticated_user_can_index_own_categories_json()
     {
-        $this->actingAs($user = factory(User::class)->create());
+        $user = $this->signIn();
 
         factory(ExpenseCategory::class)->create(['user_id' => $user->id]);
 
@@ -25,7 +22,7 @@ class ExpenseCategoryIndexTest extends TestCase
     /** @test */
     public function an_authenticated_user_cannot_index_others_categories()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         factory(ExpenseCategory::class)->create([
             'user_id' => factory(User::class)->create()->id

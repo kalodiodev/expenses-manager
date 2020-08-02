@@ -1,20 +1,15 @@
 <?php
 
-namespace Tests\Feature\ExpenseCategory;
+namespace Tests\Feature;
 
-use App\User;
-use Tests\TestCase;
-use App\ExpenseCategory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\IntegrationTestCase;
 
-class HomeTest extends TestCase
+class HomeTest extends IntegrationTestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function an_authenticated_user_can_visit_home()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         $this->get(route('home'))
             ->assertOk()
@@ -31,7 +26,7 @@ class HomeTest extends TestCase
     /** @test */
     public function a_non_ajax_request_redirects_to_home()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         $this->get(route('expense.categories'))
             ->assertRedirect(route('home'));

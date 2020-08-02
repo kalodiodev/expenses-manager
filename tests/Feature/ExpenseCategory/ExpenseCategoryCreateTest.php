@@ -2,19 +2,15 @@
 
 namespace Tests\Feature\ExpenseCategory;
 
-use App\User;
-use Tests\TestCase;
 use App\ExpenseCategory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\IntegrationTestCase;
 
-class ExpenseCategoryCreateTest extends TestCase
+class ExpenseCategoryCreateTest extends IntegrationTestCase
 {
-    use RefreshDatabase;
-
     /** @test */
     public function a_user_can_ajax_post_an_expense_category()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw())
             ->assertCreated();

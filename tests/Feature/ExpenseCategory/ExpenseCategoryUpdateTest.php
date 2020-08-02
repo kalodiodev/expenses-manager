@@ -2,15 +2,11 @@
 
 namespace Tests\Feature\ExpenseCategory;
 
-use App\User;
-use Tests\TestCase;
 use App\ExpenseCategory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\IntegrationTestCase;
 
-class ExpenseCategoryUpdateTest extends TestCase
+class ExpenseCategoryUpdateTest extends IntegrationTestCase
 {
-    use RefreshDatabase;
-
     protected $category;
 
     public function setUp(): void
@@ -23,7 +19,7 @@ class ExpenseCategoryUpdateTest extends TestCase
     /** @test */
     public function a_user_can_ajax_patch_an_expense_category()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         $this->patchJson(route('expense.category', ['category' => $this->category]), factory(ExpenseCategory::class)->raw())
             ->assertOk();
