@@ -70,14 +70,18 @@
 
             </v-col>
         </v-row>
+
+        <confirm-dialog-component ref="confirm"></confirm-dialog-component>
     </v-container>
 </template>
 
 <script>
     import CategoryFormComponent from "./CategoryFormComponent";
+    import ConfirmDialogComponent from "./ConfirmDialogComponent";
 
     export default {
         components: {
+            ConfirmDialogComponent,
             CategoryFormComponent
         },
         data() {
@@ -178,13 +182,22 @@
                 this.dialogTitle = 'Edit Category';
             },
             deleteItem: function (item) {
-                axios.delete('/expense-categories/' + item.id)
-                    .then(res => {
-                        this.fetchCategories(this.page)
-                    })
-                    .catch(err => {
+                this.$refs.confirm.open({
+                    title: 'Delete Expense Category',
+                    message: 'Are you sure you want to delete this category?',
+                    confirmText: 'Confirm',
+                    rejectText: 'Cancel'
+                }).then(result => {
+                    if (result) {
+                        axios.delete('/expense-categories/' + item.id)
+                            .then(res => {
+                                this.fetchCategories(this.page)
+                            })
+                            .catch(err => {
 
-                    })
+                            })
+                    }
+                });
             }
         }
     }
