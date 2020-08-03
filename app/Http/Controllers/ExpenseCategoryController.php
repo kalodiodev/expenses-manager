@@ -14,7 +14,9 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
-        return auth()->user()->expenseCategories()->paginate();
+        $search = \request()->get('search') ?: '';
+
+        return auth()->user()->expenseCategories()->search($search)->paginate();
     }
 
     /**

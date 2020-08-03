@@ -7,6 +7,7 @@
                               :page="page"
                               :items-per-page="totalEntries"
                               class="elevation-1"
+                              :loading="loading"
                               hide-default-footer>
 
                     <template v-slot:top>
@@ -31,7 +32,11 @@
                             <v-row class="flex-row-reverse">
                                 <v-col cols="12" sm="6" md="3">
                                     <v-text-field
+                                        v-model="searchTerm"
+                                        @keypress.enter="search"
+                                        @click:clear="clearSearch"
                                         label="Search"
+                                        clearable
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -87,15 +92,17 @@
         data() {
             return {
                 dialog: false,
+                loading: false,
                 dialogTitle: '',
 
                 editedItem: {},
                 editedIndex: -1,
 
+                searchTerm: '',
+
                 page: 1,
                 totalPages: 1,
                 totalEntries: 0,
-                search: '',
                 toEntry: 0,
                 fromEntry: 0,
 
@@ -121,7 +128,13 @@
                 this.fetchCategories(this.page);
             },
             fetchCategories: function (page) {
-                axios.get('/expense-categories?page=' + page)
+                this.loading = true;
+
+                if (! this.searchTerm) {
+                    this.searchTerm = '';
+                }
+
+                axios.get('/expense-categories?page=' + page + "&search=" + this.searchTerm)
                     .then(res => {
                         this.fromEntry = res.data.from;
                         this.toEntry = res.data.to;
@@ -130,9 +143,11 @@
                         this.totalPages = res.data.last_page
 
                         this.categories = res.data.data;
+
+                        this.loading = false;
                     })
                     .catch(err => {
-
+                        this.loading = false;
                     })
             },
             close: function () {
@@ -198,7 +213,15 @@
                             })
                     }
                 });
-            }
+            },
+            search: function () {
+                this.categories = [];
+                this.fetchCategories(1);
+            },
+            clearSearch: function () {
+                this.searchTerm = '';
+                this.fetchCategories(1);
+            },
         }
     }
 </script>

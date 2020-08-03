@@ -2307,6 +2307,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2317,13 +2322,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       dialog: false,
+      loading: false,
       dialogTitle: '',
       editedItem: {},
       editedIndex: -1,
+      searchTerm: '',
       page: 1,
       totalPages: 1,
       totalEntries: 0,
-      search: '',
       toEntry: 0,
       fromEntry: 0,
       headers: [{
@@ -2355,14 +2361,23 @@ __webpack_require__.r(__webpack_exports__);
     fetchCategories: function fetchCategories(page) {
       var _this = this;
 
-      axios.get('/expense-categories?page=' + page).then(function (res) {
+      this.loading = true;
+
+      if (!this.searchTerm) {
+        this.searchTerm = '';
+      }
+
+      axios.get('/expense-categories?page=' + page + "&search=" + this.searchTerm).then(function (res) {
         _this.fromEntry = res.data.from;
         _this.toEntry = res.data.to;
         _this.page = res.data.current_page;
         _this.totalEntries = res.data.total;
         _this.totalPages = res.data.last_page;
         _this.categories = res.data.data;
-      })["catch"](function (err) {});
+        _this.loading = false;
+      })["catch"](function (err) {
+        _this.loading = false;
+      });
     },
     close: function close() {
       this.dialog = false;
@@ -2420,6 +2435,14 @@ __webpack_require__.r(__webpack_exports__);
           })["catch"](function (err) {});
         }
       });
+    },
+    search: function search() {
+      this.categories = [];
+      this.fetchCategories(1);
+    },
+    clearSearch: function clearSearch() {
+      this.searchTerm = '';
+      this.fetchCategories(1);
     }
   }
 });
@@ -4016,6 +4039,7 @@ var render = function() {
                   items: _vm.categories,
                   page: _vm.page,
                   "items-per-page": _vm.totalEntries,
+                  loading: _vm.loading,
                   "hide-default-footer": ""
                 },
                 scopedSlots: _vm._u([
@@ -4067,7 +4091,32 @@ var render = function() {
                                   { attrs: { cols: "12", sm: "6", md: "3" } },
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Search" }
+                                      attrs: { label: "Search", clearable: "" },
+                                      on: {
+                                        keypress: function($event) {
+                                          if (
+                                            !$event.type.indexOf("key") &&
+                                            _vm._k(
+                                              $event.keyCode,
+                                              "enter",
+                                              13,
+                                              $event.key,
+                                              "Enter"
+                                            )
+                                          ) {
+                                            return null
+                                          }
+                                          return _vm.search($event)
+                                        },
+                                        "click:clear": _vm.clearSearch
+                                      },
+                                      model: {
+                                        value: _vm.searchTerm,
+                                        callback: function($$v) {
+                                          _vm.searchTerm = $$v
+                                        },
+                                        expression: "searchTerm"
+                                      }
                                     })
                                   ],
                                   1
