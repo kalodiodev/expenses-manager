@@ -18,4 +18,12 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $user->expenseCategories);
     }
+
+    /** @test */
+    public function a_user_has_income_categories()
+    {
+        $user = factory(User::class)->create();
+
+        $this->assertInstanceOf(Collection::class, $user->incomeCategories);
+    }
 }

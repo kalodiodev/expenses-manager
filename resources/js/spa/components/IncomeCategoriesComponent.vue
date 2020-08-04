@@ -1,5 +1,5 @@
 <template>
-    <categories-component :base-url="'/expense-categories'"></categories-component>
+    <categories-component :base-url="'/income-categories'"></categories-component>
 </template>
 
 <script>

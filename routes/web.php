@@ -22,4 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/expense-categories', 'ExpenseCategoryController@store');
     Route::patch('/expense-categories/{category}', 'ExpenseCategoryController@update')->name('expense.category');
     Route::delete('/expense-categories/{category}', 'ExpenseCategoryController@destroy');
+
+    Route::get('/income-categories', 'IncomeCategoryController@index')->name('income.categories');
 });
