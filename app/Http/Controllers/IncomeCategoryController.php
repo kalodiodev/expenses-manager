@@ -30,4 +30,21 @@ class IncomeCategoryController extends Controller
             ->create($request->only(['name', 'description']));
     }
 
+    /**
+     * Delete Category
+     *
+     * @param IncomeCategory $category
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(IncomeCategory $category)
+    {
+        if ($category->user->id != auth()->user()->id) {
+            abort(404, 'Income category not found.');
+        }
+
+        $category->delete();
+
+        return response()->noContent();
+    }
 }
