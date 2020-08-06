@@ -24,4 +24,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/expense-categories/{category}', 'ExpenseCategoryController@destroy');
 
     Route::get('/income-categories', 'IncomeCategoryController@index')->name('income.categories');
+    Route::post('/income-categories', 'IncomeCategoryController@store');
 });
