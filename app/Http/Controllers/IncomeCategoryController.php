@@ -31,6 +31,20 @@ class IncomeCategoryController extends Controller
     }
 
     /**
+     * Update Category
+     *
+     * @param IncomeCategory $category
+     * @param Request $request
+     * @return IncomeCategory
+     */
+    public function update(IncomeCategory $category, Request $request)
+    {
+        $category->update($request->only(['name', 'description']));
+
+        return $category;
+    }
+
+    /**
      * Delete Category
      *
      * @param IncomeCategory $category
