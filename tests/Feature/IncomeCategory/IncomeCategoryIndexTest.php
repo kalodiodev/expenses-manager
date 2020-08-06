@@ -31,4 +31,23 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
         $this->get(route('income.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
             ->assertJsonCount(0, 'data');
     }
+
+    /** @test */
+    public function a_user_can_search_income_categories()
+    {
+        $user = $this->signIn();
+
+        factory(IncomeCategory::class)->create([
+            'user_id' => $user->id,
+            'name' => 'Test'
+        ]);
+
+        factory(IncomeCategory::class)->create([
+            'user_id' => $user->id,
+            'name' => 'Other'
+        ]);
+
+        $this->getJson(route('income.categories', ['search' => 'Test']))
+            ->assertJsonCount(1, 'data');
+    }
 }

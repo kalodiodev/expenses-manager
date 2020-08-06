@@ -14,7 +14,9 @@ class IncomeCategoryController extends Controller
      */
     public function index()
     {
-        return auth()->user()->incomeCategories()->paginate();
+        $search = \request()->get('search') ?: '';
+
+        return auth()->user()->incomeCategories()->search($search)->paginate();
     }
 
     /**

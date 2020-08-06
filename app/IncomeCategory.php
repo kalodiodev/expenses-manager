@@ -30,4 +30,16 @@ class IncomeCategory extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Search categories
+     *
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'LIKE', '%' . $term . '%');
+    }
 }
