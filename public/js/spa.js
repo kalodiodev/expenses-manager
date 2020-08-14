@@ -5982,7 +5982,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Expenses")])],
+                    [
+                      _c("v-list-item-title", [
+                        _vm._v(_vm._s(_vm.$t("Expenses")))
+                      ])
+                    ],
                     1
                   )
                 ],
@@ -6004,7 +6008,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list-item-content",
-                    [_c("v-list-item-title", [_vm._v("Income Categories")])],
+                    [
+                      _c("v-list-item-title", [
+                        _vm._v(_vm._s(_vm.$t("Income Categories")))
+                      ])
+                    ],
                     1
                   )
                 ],
@@ -6670,7 +6678,7 @@ var render = function() {
             }
           }
         },
-        [_vm._v("Gr")]
+        [_vm._v("Ελ")]
       )
     ],
     1
@@ -66785,20 +66793,83 @@ __webpack_require__.r(__webpack_exports__);
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_i18n__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+function loadLocaleMessages() {
+  var locales = __webpack_require__("./resources/js/spa/locales sync recursive [A-Za-z0-9-_,\\s]+\\.json$/");
+
+  var messages = {};
+  locales.keys().forEach(function (key) {
+    var matched = key.match(/([A-Za-z0-9-_]+)\./i);
+
+    if (matched && matched.length > 1) {
+      var locale = matched[1];
+      messages[locale] = locales(key);
+    }
+  });
+  return messages;
+}
+
 /* harmony default export */ __webpack_exports__["default"] = (new vue_i18n__WEBPACK_IMPORTED_MODULE_1__["default"]({
   locale: "en",
   fallbackLocale: "en",
-  messages: {
-    en: {
-      'Dashboard': 'Dashboard',
-      'Expense Categories': 'Expense Categories'
-    },
-    el: {
-      'Dashboard': 'Πίνακας Ελέγχου',
-      'Expense Categories': 'Κατηγορίες Εξόδων'
-    }
-  }
+  messages: loadLocaleMessages()
 }));
+
+/***/ }),
+
+/***/ "./resources/js/spa/locales sync recursive [A-Za-z0-9-_,\\s]+\\.json$/":
+/*!*****************************************************************!*\
+  !*** ./resources/js/spa/locales sync [A-Za-z0-9-_,\s]+\.json$/ ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./el.json": "./resources/js/spa/locales/el.json",
+	"./en.json": "./resources/js/spa/locales/en.json"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/js/spa/locales sync recursive [A-Za-z0-9-_,\\s]+\\.json$/";
+
+/***/ }),
+
+/***/ "./resources/js/spa/locales/el.json":
+/*!******************************************!*\
+  !*** ./resources/js/spa/locales/el.json ***!
+  \******************************************/
+/*! exports provided: Dashboard, Expense Categories, Income Categories, Expenses, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"Dashboard\":\"Πίνακας Ελέγχου\",\"Expense Categories\":\"Κατηγορίες Εξόδων\",\"Income Categories\":\"Κατηγορίες Εσόδων\",\"Expenses\":\"Έξοδα\"}");
+
+/***/ }),
+
+/***/ "./resources/js/spa/locales/en.json":
+/*!******************************************!*\
+  !*** ./resources/js/spa/locales/en.json ***!
+  \******************************************/
+/*! exports provided: Dashboard, Expense Categories, Income Categories, Expenses, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"Dashboard\":\"Dashboard\",\"Expense Categories\":\"Expense Categories\",\"Income Categories\":\"Income Categories\",\"Expenses\":\"Expenses\"}");
 
 /***/ }),
 
