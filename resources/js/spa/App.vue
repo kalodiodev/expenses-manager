@@ -35,6 +35,10 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
+
+            <template v-slot:append>
+                <LanguageSwitchComponent></LanguageSwitchComponent>
+            </template>
         </v-navigation-drawer>
 
         <v-app-bar app color="blue" light>
@@ -52,7 +56,12 @@
 </template>
 
 <script>
+import LanguageSwitchComponent from "./components/LanguageSwitchComponent";
+
 export default {
+    components: {
+        LanguageSwitchComponent
+    },
     data() {
         return {
             drawer: true,
