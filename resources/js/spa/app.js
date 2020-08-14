@@ -12,6 +12,7 @@ window.Vue = require('vue');
 
 import router from './router'
 import vuetify from "./vuetify";
+import i18n from './i18n';
 
 /**
  * The following block of code may be used to automatically register your
@@ -36,5 +37,6 @@ Vue.component('manager-app', require('./App.vue').default);
 const app = new Vue({
     el: '#app',
     router,
+    i18n,
     vuetify
 });

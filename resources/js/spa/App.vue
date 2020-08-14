@@ -7,7 +7,7 @@
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Dashboard</v-list-item-title>
+                        <v-list-item-title>{{ $t('Dashboard') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link :to="{ name: 'expense-categories'}" style="text-decoration: none;">
@@ -15,7 +15,7 @@
                         <v-icon>mdi-folder</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Expense Categories</v-list-item-title>
+                        <v-list-item-title>{{ $t('Expense Categories') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link :to="{ name: 'expenses'}" style="text-decoration: none;">
@@ -56,6 +56,15 @@ export default {
     data() {
         return {
             drawer: true,
+        }
+    },
+    created() {
+        const locale = localStorage.getItem("locale");
+
+        if (locale) {
+            this.$i18n.locale = locale;
+        } else if (navigator.language) {
+            this.$i18n.locale = navigator.language.substring(0, 2);
         }
     }
 }
