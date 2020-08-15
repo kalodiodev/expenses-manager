@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\ExpenseCategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class ExpenseCategoryController extends Controller
 {
@@ -27,6 +29,8 @@ class ExpenseCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validator($request->all())->validate();
+
         return auth()->user()
             ->expenseCategories()
             ->create($request->only(['name', 'description']));
@@ -41,6 +45,8 @@ class ExpenseCategoryController extends Controller
      */
     public function update(ExpenseCategory $category, Request $request)
     {
+        $this->validator($request->all(), $category)->validate();
+
         $category->update($request->only(['name', 'description']));
 
         return $category;
@@ -62,5 +68,24 @@ class ExpenseCategoryController extends Controller
         $category->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Get a validator for an expense category
+     *
+     * @param array $data
+     * @param null $expense
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data, $expense = null)
+    {
+        $rules = [
+            'name' => ['required', 'string', 'max:190'],
+        ];
+
+        $unique = Rule::unique('expense_categories');
+        $rules['name'][] = $expense ? $unique->ignore($expense->id) : $unique;
+
+        return Validator::make($data, $rules);
     }
 }
