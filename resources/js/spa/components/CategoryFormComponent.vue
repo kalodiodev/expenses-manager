@@ -13,13 +13,15 @@
                     <v-col>
                         <v-col>
                             <v-text-field
-                                v-model="$v.editedItem.name.$model"
+                                v-model="editedItem.name"
+                                @blur="$v.editedItem.name.$touch()"
                                 :error-messages="nameErrors"
                                 label="Category Name"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-textarea
-                                v-model="$v.editedItem.description.$model"
+                                v-model="editedItem.description"
+                                @blur="$v.editedItem.description.$touch()"
                                 :error-messages="descriptionErrors"
                                 label="Description"></v-textarea>
                         </v-col>
@@ -30,7 +32,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save" :disabled="$v.editedItem.$invalid">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -76,9 +78,8 @@ export default {
             this.$emit('close-dialog');
         },
         save() {
+            this.$v.editedItem.$touch();
             if (this.$v.editedItem.$invalid) {
-                console.log('Validation');
-
                 return;
             }
 

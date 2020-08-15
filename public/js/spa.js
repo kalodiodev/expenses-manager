@@ -2360,6 +2360,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2398,8 +2400,9 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('close-dialog');
     },
     save: function save() {
+      this.$v.editedItem.$touch();
+
       if (this.$v.editedItem.$invalid) {
-        console.log('Validation');
         return;
       }
 
@@ -6396,12 +6399,17 @@ var render = function() {
                               "error-messages": _vm.nameErrors,
                               label: "Category Name"
                             },
+                            on: {
+                              blur: function($event) {
+                                return _vm.$v.editedItem.name.$touch()
+                              }
+                            },
                             model: {
-                              value: _vm.$v.editedItem.name.$model,
+                              value: _vm.editedItem.name,
                               callback: function($$v) {
-                                _vm.$set(_vm.$v.editedItem.name, "$model", $$v)
+                                _vm.$set(_vm.editedItem, "name", $$v)
                               },
-                              expression: "$v.editedItem.name.$model"
+                              expression: "editedItem.name"
                             }
                           })
                         ],
@@ -6416,16 +6424,17 @@ var render = function() {
                               "error-messages": _vm.descriptionErrors,
                               label: "Description"
                             },
+                            on: {
+                              blur: function($event) {
+                                return _vm.$v.editedItem.description.$touch()
+                              }
+                            },
                             model: {
-                              value: _vm.$v.editedItem.description.$model,
+                              value: _vm.editedItem.description,
                               callback: function($$v) {
-                                _vm.$set(
-                                  _vm.$v.editedItem.description,
-                                  "$model",
-                                  $$v
-                                )
+                                _vm.$set(_vm.editedItem, "description", $$v)
                               },
-                              expression: "$v.editedItem.description.$model"
+                              expression: "editedItem.description"
                             }
                           })
                         ],
@@ -6458,11 +6467,7 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  attrs: {
-                    color: "blue darken-1",
-                    text: "",
-                    disabled: _vm.$v.editedItem.$invalid
-                  },
+                  attrs: { color: "blue darken-1", text: "" },
                   on: { click: _vm.save }
                 },
                 [_vm._v("Save")]
