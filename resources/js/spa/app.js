@@ -34,6 +34,9 @@ Vue.component('manager-app', require('./App.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
 const app = new Vue({
     el: '#app',
     router,
