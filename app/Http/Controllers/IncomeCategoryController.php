@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\IncomeCategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class IncomeCategoryController extends Controller
 {
@@ -27,6 +29,8 @@ class IncomeCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validator($request->all())->validate();
+
         return auth()->user()
             ->incomeCategories()
             ->create($request->only(['name', 'description']));
@@ -41,6 +45,8 @@ class IncomeCategoryController extends Controller
      */
     public function update(IncomeCategory $category, Request $request)
     {
+        $this->validator($request->all(), $category)->validate();
+
         $category->update($request->only(['name', 'description']));
 
         return $category;
@@ -81,5 +87,24 @@ class IncomeCategoryController extends Controller
         }
 
         return response()->json(['exists' => false]);
+    }
+
+    /**
+     * Get a validator for an income category
+     *
+     * @param array $data
+     * @param null $expense
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data, $expense = null)
+    {
+        $rules = [
+            'name' => ['required', 'string', 'max:190'],
+        ];
+
+        $unique = Rule::unique('income_categories');
+        $rules['name'][] = $expense ? $unique->ignore($expense->id) : $unique;
+
+        return Validator::make($data, $rules);
     }
 }
