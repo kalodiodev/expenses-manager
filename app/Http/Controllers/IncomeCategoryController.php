@@ -63,4 +63,23 @@ class IncomeCategoryController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * Determine whether category name exists
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exists(Request $request)
+    {
+        $category = IncomeCategory::where('name', $request->name)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        if ($category) {
+            return response()->json(['exists' => true]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
 }

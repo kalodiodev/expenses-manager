@@ -28,4 +28,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/income-categories', 'IncomeCategoryController@store');
     Route::patch('/income-categories/{category}', 'IncomeCategoryController@update')->name('income.category');
     Route::delete('/income-categories/{category}', 'IncomeCategoryController@destroy');
+    Route::post('/income-categories/exists', 'IncomeCategoryController@exists')->name('income.category.exists');
 });

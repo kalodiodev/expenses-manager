@@ -37,7 +37,7 @@ class ExpenseCategoryController extends Controller
     }
 
     /**
-     * Show Category
+     * Determine whether category name exists
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
