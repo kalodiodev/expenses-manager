@@ -37,6 +37,25 @@ class ExpenseCategoryController extends Controller
     }
 
     /**
+     * Show Category
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exists(Request $request)
+    {
+        $category = ExpenseCategory::where('name', $request->name)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        if ($category) {
+            return response()->json(['exists' => true]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
+
+    /**
      * Update Category
      *
      * @param ExpenseCategory $category

@@ -23,6 +23,7 @@
                                 :editedItem="editedItem"
                                 :title="dialogTitle"
                                 :newBtn="'New Category'"
+                                :exists-url="baseUrl + '/' + 'exists'"
                                 @new-dialog="newCategory"
                                 @save-dialog="save($event)"
                                 @close-dialog="close"></category-form-component>

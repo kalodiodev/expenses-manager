@@ -14,14 +14,14 @@
                         <v-col>
                             <v-text-field
                                 v-model="editedItem.name"
-                                @blur="$v.editedItem.name.$touch()"
                                 :error-messages="nameErrors"
+                                @blur="validateName"
                                 label="Category Name"></v-text-field>
                         </v-col>
                         <v-col>
                             <v-textarea
                                 v-model="editedItem.description"
-                                @blur="$v.editedItem.description.$touch()"
+                                @blur="validateDescription"
                                 :error-messages="descriptionErrors"
                                 label="Description"></v-textarea>
                         </v-col>
@@ -32,7 +32,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="save" :disabled="!isValid">Save</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -44,6 +44,10 @@ import maxLength from "vuelidate/lib/validators/maxLength";
 
 export default {
     props: {
+        existsUrl: {
+            required: true,
+            type: String
+        },
         dialog: {
             default: false,
             type: Boolean
@@ -58,11 +62,30 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            nameErrors: [],
+            descriptionErrors: [],
+            validatedName: ''
+        }
+    },
     validations: {
         editedItem: {
             name: {
                 required: required,
-                maxLength: maxLength(55)
+                maxLength: maxLength(55),
+                isUnique: function (value) {
+                    if (value === '') return true
+
+                    return new Promise(async (resolve, reject) => {
+                        await axios.post(this.existsUrl, {
+                             'name': value
+                        }).then(res => {
+                            if (res.data.exists) this.nameErrors.push('Name must be unique.')
+                            resolve(! res.data.exists)
+                        });
+                    })
+                }
             },
             description: {
                 maxLength: maxLength(190)
@@ -75,31 +98,51 @@ export default {
         },
         close() {
             this.$v.$reset();
+            this.nameErrors = [];
+            this.descriptionErrors = [];
             this.$emit('close-dialog');
         },
         save() {
             this.$v.editedItem.$touch();
-            if (this.$v.editedItem.$invalid) {
-                return;
-            }
+
+            if (this.$v.editedItem.$invalid) return;
+
+            this.$v.$reset();
 
             this.$emit('save-dialog', this.editedItem);
         },
+        validateName() {
+            this.$v.editedItem.name.$touch();
+
+            if (this.isValidatedNameValueUnchanged()) return;
+
+            this.nameValidationErrors();
+            this.cacheNameValidatedValue();
+        },
+        isValidatedNameValueUnchanged() {
+            return this.$v.editedItem.name.$dirty && this.editedItem.name === this.validatedName
+        },
+        cacheNameValidatedValue() {
+            this.validatedName = this.editedItem.name
+        },
+        nameValidationErrors() {
+            this.nameErrors = [];
+            if (!this.$v.editedItem.name.$dirty) this.nameErrors = []
+            !this.$v.editedItem.name.maxLength && this.nameErrors.push('Name must be at most 55 characters long')
+            !this.$v.editedItem.name.required && this.nameErrors.push('Name is required.')
+            !this.$v.editedItem.name.isUnique.resolve
+        },
+        validateDescription() {
+            this.$v.editedItem.description.$touch();
+            this.descriptionErrors = []
+            if (!this.$v.editedItem.description.$dirty) this.descriptionErrors = []
+            !this.$v.editedItem.description.maxLength && this.descriptionErrors.push('Description must be at most 190 characters long')
+        },
     },
     computed: {
-        nameErrors () {
-            const errors = []
-            if (!this.$v.editedItem.name.$dirty) return errors
-            !this.$v.editedItem.name.maxLength && errors.push('Name must be at most 55 characters long')
-            !this.$v.editedItem.name.required && errors.push('Name is required.')
-            return errors
+        isValid() {
+            return this.editedItem.name !== '' && this.nameErrors.length === 0 && this.descriptionErrors.length === 0
         },
-        descriptionErrors () {
-            const errors = []
-            if (!this.$v.editedItem.description.$dirty) return errors
-            !this.$v.editedItem.description.maxLength && errors.push('Description must be at most 190 characters long')
-            return errors
-        }
     }
 }
 </script>
