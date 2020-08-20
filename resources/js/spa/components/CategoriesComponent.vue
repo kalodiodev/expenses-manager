@@ -29,7 +29,9 @@
                                 @close-dialog="close"></category-form-component>
                         </v-toolbar>
 
-                        <search-component v-model="searchTerm" @search="search"></search-component>
+                        <search-component v-model="searchTerm"
+                                          @search="search"
+                                          @cleared="clearSearch"></search-component>
                     </template>
 
                     <template v-slot:item.actions="{ item }">
@@ -126,11 +128,7 @@ export default {
         fetchCategories: function (page) {
             this.loading = true;
 
-            if (!this.searchTerm) {
-                this.searchTerm = '';
-            }
-
-            axios.get(this.baseUrl + '?page=' + page + "&search=" + this.searchTerm)
+            axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : ''))
                 .then(res => {
                     this.fromEntry = res.data.from;
                     this.toEntry = res.data.to;
@@ -215,7 +213,6 @@ export default {
             this.fetchCategories(1);
         },
         clearSearch: function () {
-            this.searchTerm = '';
             this.fetchCategories(1);
         },
     }

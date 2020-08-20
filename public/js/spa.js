@@ -2169,6 +2169,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2226,12 +2228,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
-
-      if (!this.searchTerm) {
-        this.searchTerm = '';
-      }
-
-      axios.get(this.baseUrl + '?page=' + page + "&search=" + this.searchTerm).then(function (res) {
+      axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : '')).then(function (res) {
         _this.fromEntry = res.data.from;
         _this.toEntry = res.data.to;
         _this.page = res.data.current_page;
@@ -2305,7 +2302,6 @@ __webpack_require__.r(__webpack_exports__);
       this.fetchCategories(1);
     },
     clearSearch: function clearSearch() {
-      this.searchTerm = '';
       this.fetchCategories(1);
     }
   }
@@ -2719,11 +2715,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
       "default": '',
       type: String
+    }
+  },
+  data: function data() {
+    return {
+      dirty: false,
+      cleared: true,
+      submitted: false
+    };
+  },
+  methods: {
+    input: function input($event) {
+      if (this.cleared && !$event) return;
+      this.dirty = true;
+      this.cleared = false;
+      this.$emit('input', $event);
+    },
+    clear: function clear() {
+      this.$emit('input', '');
+      if (!this.cleared && this.submitted) this.$emit('cleared');
+      this.dirty = false;
+      this.cleared = true;
+      this.submitted = false;
+    },
+    search: function search() {
+      if (this.dirty && !this.cleared) {
+        this.$emit('search');
+        this.submitted = true;
+      }
+
+      this.dirty = false;
+      this.cleared = false;
     }
   }
 });
@@ -7028,7 +7056,7 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("search-component", {
-                          on: { search: _vm.search },
+                          on: { search: _vm.search, cleared: _vm.clearSearch },
                           model: {
                             value: _vm.searchTerm,
                             callback: function($$v) {
@@ -7591,9 +7619,7 @@ var render = function() {
                   clearable: ""
                 },
                 on: {
-                  input: function($event) {
-                    return _vm.$emit("input", $event)
-                  },
+                  input: _vm.input,
                   keypress: function($event) {
                     if (
                       !$event.type.indexOf("key") &&
@@ -7601,11 +7627,10 @@ var render = function() {
                     ) {
                       return null
                     }
-                    return _vm.$emit("search")
+                    return _vm.search($event)
                   },
-                  "click:clear": function($event) {
-                    return _vm.$emit("input", "")
-                  }
+                  blur: _vm.search,
+                  "click:clear": _vm.clear
                 }
               })
             ],
