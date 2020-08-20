@@ -29,19 +29,7 @@
                                 @close-dialog="close"></category-form-component>
                         </v-toolbar>
 
-                        <v-container>
-                            <v-row class="flex-row-reverse">
-                                <v-col cols="12" sm="6" md="3">
-                                    <v-text-field
-                                        v-model="searchTerm"
-                                        @keypress.enter="search"
-                                        @click:clear="clearSearch"
-                                        label="Search"
-                                        clearable
-                                    ></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-container>
+                        <search-component v-model="searchTerm" @search="search"></search-component>
                     </template>
 
                     <template v-slot:item.actions="{ item }">
@@ -84,9 +72,11 @@
 <script>
 import CategoryFormComponent from "./CategoryFormComponent";
 import ConfirmDialogComponent from "./ConfirmDialogComponent";
+import SearchComponent from "./SearchComponent";
 
 export default {
     components: {
+        SearchComponent,
         ConfirmDialogComponent,
         CategoryFormComponent
     },
