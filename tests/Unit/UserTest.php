@@ -11,19 +11,30 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+    }
+
     /** @test */
     public function a_user_has_expense_categories()
     {
-        $user = factory(User::class)->create();
-
-        $this->assertInstanceOf(Collection::class, $user->expenseCategories);
+        $this->assertInstanceOf(Collection::class, $this->user->expenseCategories);
     }
 
     /** @test */
     public function a_user_has_income_categories()
     {
-        $user = factory(User::class)->create();
+        $this->assertInstanceOf(Collection::class, $this->user->incomeCategories);
+    }
 
-        $this->assertInstanceOf(Collection::class, $user->incomeCategories);
+    /** @test */
+    public function a_user_has_expenses()
+    {
+        $this->assertInstanceOf(Collection::class, $this->user->expenses);
     }
 }
