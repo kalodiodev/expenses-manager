@@ -2633,8 +2633,91 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.fetchEntries(this.page);
+  },
+  data: function data() {
+    return {
+      loading: false,
+      page: 1,
+      totalPages: 1,
+      totalEntries: 0,
+      toEntry: 0,
+      fromEntry: 0,
+      searchTerm: '',
+      baseUrl: '/expenses',
+      headers: [{
+        text: 'Date',
+        align: 'start',
+        sortable: true,
+        value: 'date'
+      }, {
+        text: 'Description',
+        value: 'description'
+      }, {
+        text: 'Cost',
+        value: 'cost'
+      }, {
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
+      }],
+      entries: []
+    };
+  },
+  methods: {
+    onPageChange: function onPageChange() {
+      this.fetchEntries(this.page);
+    },
+    fetchEntries: function fetchEntries(page) {
+      var _this = this;
+
+      this.loading = true;
+      axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : '')).then(function (res) {
+        _this.fromEntry = res.data.from;
+        _this.toEntry = res.data.to;
+        _this.page = res.data.current_page;
+        _this.totalEntries = res.data.total;
+        _this.totalPages = res.data.last_page;
+        _this.entries = res.data.data;
+        _this.loading = false;
+      })["catch"](function (err) {
+        _this.loading = false;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -7482,9 +7565,81 @@ var render = function() {
       _c(
         "v-row",
         [
-          _c("v-col", { staticClass: "text-center" }, [
-            _vm._v("\n            Expenses\n        ")
-          ])
+          _c(
+            "v-col",
+            { staticClass: "text-center" },
+            [
+              _c("v-data-table", {
+                staticClass: "elevation-1",
+                attrs: {
+                  headers: _vm.headers,
+                  items: _vm.entries,
+                  page: _vm.page,
+                  "items-per-page": _vm.totalEntries,
+                  loading: _vm.loading,
+                  "hide-default-footer": ""
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "top",
+                    fn: function() {
+                      return [
+                        _c(
+                          "v-toolbar",
+                          { attrs: { flat: "", color: "white" } },
+                          [
+                            _c("v-toolbar-title", [_vm._v("Expenses")]),
+                            _vm._v(" "),
+                            _c("v-divider", {
+                              staticClass: "mx-4",
+                              attrs: { inset: "", vertical: "" }
+                            }),
+                            _vm._v(" "),
+                            _c("v-spacer")
+                          ],
+                          1
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-center mt-3" }, [
+                _c("p", [
+                  _vm._v(
+                    _vm._s(_vm.fromEntry) +
+                      " to " +
+                      _vm._s(_vm.toEntry) +
+                      " of " +
+                      _vm._s(_vm.totalEntries) +
+                      " Entries"
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "mt-3 text-center" },
+                [
+                  _c("v-pagination", {
+                    attrs: { length: _vm.totalPages, "total-visible": 7 },
+                    on: { input: _vm.onPageChange },
+                    model: {
+                      value: _vm.page,
+                      callback: function($$v) {
+                        _vm.page = $$v
+                      },
+                      expression: "page"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       )
