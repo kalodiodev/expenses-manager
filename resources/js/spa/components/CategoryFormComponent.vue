@@ -31,8 +31,8 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save" :disabled="!isValid">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="close" :disabled="! buttonsEnabled">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save" :disabled="! buttonsEnabled">Save</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -66,7 +66,7 @@ export default {
         return {
             nameErrors: [],
             descriptionErrors: [],
-            validatedName: ''
+            buttonsEnabled: true
         }
     },
     validations: {
@@ -74,18 +74,6 @@ export default {
             name: {
                 required: required,
                 maxLength: maxLength(55),
-                isUnique: function (value) {
-                    if (value === '') return true
-
-                    return new Promise(async (resolve, reject) => {
-                        await axios.post(this.existsUrl, {
-                             'name': value
-                        }).then(res => {
-                            if (res.data.exists) this.nameErrors.push('Name must be unique.')
-                            resolve(! res.data.exists)
-                        });
-                    })
-                }
             },
             description: {
                 maxLength: maxLength(190)
@@ -109,40 +97,34 @@ export default {
 
             this.$v.$reset();
 
-            this.$emit('save-dialog', this.editedItem);
+            this.buttonsEnabled = false
+
+            axios.post(this.existsUrl, {
+                'name': this.editedItem.name
+            }).then(res => {
+                this.buttonsEnabled = true;
+                if (res.data.exists && res.data.id !== this.editedItem.id) {
+                    this.nameErrors.push('Name must be unique.')
+
+                    return;
+                }
+
+                this.$emit('save-dialog', this.editedItem);
+            });
         },
         validateName() {
             this.$v.editedItem.name.$touch();
-
-            if (this.isValidatedNameValueUnchanged()) return;
-
-            this.nameValidationErrors();
-            this.cacheNameValidatedValue();
-        },
-        isValidatedNameValueUnchanged() {
-            return this.$v.editedItem.name.$dirty && this.editedItem.name === this.validatedName
-        },
-        cacheNameValidatedValue() {
-            this.validatedName = this.editedItem.name
-        },
-        nameValidationErrors() {
             this.nameErrors = [];
             if (!this.$v.editedItem.name.$dirty) this.nameErrors = []
             !this.$v.editedItem.name.maxLength && this.nameErrors.push('Name must be at most 55 characters long')
             !this.$v.editedItem.name.required && this.nameErrors.push('Name is required.')
-            !this.$v.editedItem.name.isUnique.resolve
         },
         validateDescription() {
             this.$v.editedItem.description.$touch();
             this.descriptionErrors = []
             if (!this.$v.editedItem.description.$dirty) this.descriptionErrors = []
             !this.$v.editedItem.description.maxLength && this.descriptionErrors.push('Description must be at most 190 characters long')
-        },
-    },
-    computed: {
-        isValid() {
-            return this.editedItem.name !== '' && this.nameErrors.length === 0 && this.descriptionErrors.length === 0
-        },
+        }
     }
 }
 </script>

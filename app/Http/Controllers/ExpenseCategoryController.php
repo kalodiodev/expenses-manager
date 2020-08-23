@@ -49,10 +49,16 @@ class ExpenseCategoryController extends Controller
             ->first();
 
         if ($category) {
-            return response()->json(['exists' => true]);
+            return response()->json([
+                'id' => $category->id,
+                'exists' => true
+            ]);
         }
 
-        return response()->json(['exists' => false]);
+        return response()->json([
+            'id' => null,
+            'exists' => false
+        ]);
     }
 
     /**
