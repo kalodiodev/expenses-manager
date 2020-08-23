@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\ExpenseCategory;
 
+use App\User;
 use App\ExpenseCategory;
 use Illuminate\Support\Str;
 use Tests\IntegrationTestCase;
@@ -9,21 +10,32 @@ use Tests\IntegrationTestCase;
 class ExpenseCategoryUpdateTest extends IntegrationTestCase
 {
     protected $category;
+    protected $user;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->category = factory(ExpenseCategory::class)->create();
+        $this->user = factory(User::class)->create();
+        $this->category = factory(ExpenseCategory::class)->create(['user_id' => $this->user->id]);
     }
 
     /** @test */
-    public function a_user_can_ajax_patch_an_expense_category()
+    public function a_user_can_ajax_patch_an_expense_category_that_owns()
+    {
+        $this->signIn($this->user);
+
+        $this->patchCategory($this->categoryRaw())
+            ->assertOk();
+    }
+
+    /** @test */
+    public function a_user_cannot_patch_an_expense_category_that_belongs_to_other_user()
     {
         $this->signIn();
 
         $this->patchCategory($this->categoryRaw())
-            ->assertOk();
+            ->assertNotFound();
     }
 
     /** @test */
@@ -36,7 +48,7 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function an_expense_category_requires_a_name()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         $this->patchCategory($this->categoryRaw(['name' => '']))
             ->assertJsonValidationErrors('name');
@@ -45,7 +57,7 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function expense_category_name_has_a_max_length()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         $this->patchCategory($this->categoryRaw(['name' => Str::random(191)]))
             ->assertJsonValidationErrors('name');
@@ -54,7 +66,7 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function expense_category_name_must_be_unique()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         factory(ExpenseCategory::class)->create(['name' => 'test']);
 

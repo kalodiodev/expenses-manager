@@ -45,6 +45,10 @@ class IncomeCategoryController extends Controller
      */
     public function update(IncomeCategory $category, Request $request)
     {
+        if ($category->user->id != auth()->user()->id) {
+            abort(404, 'Income category not found.');
+        }
+
         $this->validator($request->all(), $category)->validate();
 
         $category->update($request->only(['name', 'description']));

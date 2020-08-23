@@ -70,6 +70,10 @@ class ExpenseCategoryController extends Controller
      */
     public function update(ExpenseCategory $category, Request $request)
     {
+        if ($category->user->id != auth()->user()->id) {
+            abort(404, 'Expense category not found.');
+        }
+
         $this->validator($request->all(), $category)->validate();
 
         $category->update($request->only(['name', 'description']));

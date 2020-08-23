@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\IncomeCategory;
 
+use App\User;
 use App\IncomeCategory;
 use Illuminate\Support\Str;
 use Tests\IntegrationTestCase;
@@ -9,21 +10,32 @@ use Tests\IntegrationTestCase;
 class IncomeCategoryUpdateTest extends IntegrationTestCase
 {
     protected $category;
+    protected $user;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->category = factory(IncomeCategory::class)->create();
+        $this->user = factory(User::class)->create();
+        $this->category = factory(IncomeCategory::class)->create(['user_id' => $this->user]);
     }
 
     /** @test */
-    public function a_user_can_ajax_patch_an_income_category()
+    public function a_user_can_ajax_patch_an_income_category_that_owns()
+    {
+        $this->signIn($this->user);
+
+        $this->patchJson(route('income.category', ['category' => $this->category]), factory(IncomeCategory::class)->raw())
+            ->assertOk();
+    }
+
+    /** @test */
+    public function a_user_cannot_patch_an_income_category_that_belongs_to_other_user()
     {
         $this->signIn();
 
         $this->patchJson(route('income.category', ['category' => $this->category]), factory(IncomeCategory::class)->raw())
-            ->assertOk();
+            ->assertNotFound();
     }
 
     /** @test */
@@ -36,7 +48,7 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function an_income_category_requires_a_name()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         $this->patchCategory($this->categoryRaw(['name' => '']))
             ->assertJsonValidationErrors('name');
@@ -45,7 +57,7 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function income_category_name_has_a_max_length()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         $this->patchCategory($this->categoryRaw(['name' => Str::random(191)]))
             ->assertJsonValidationErrors('name');
@@ -54,7 +66,7 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     /** @test */
     public function income_category_name_must_be_unique()
     {
-        $this->signIn();
+        $this->signIn($this->user);
 
         factory(IncomeCategory::class)->create(['name' => 'test']);
 
