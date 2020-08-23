@@ -2098,6 +2098,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CategoryFormComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CategoryFormComponent */ "./resources/js/spa/components/CategoryFormComponent.vue");
 /* harmony import */ var _ConfirmDialogComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ConfirmDialogComponent */ "./resources/js/spa/components/ConfirmDialogComponent.vue");
 /* harmony import */ var _SearchComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchComponent */ "./resources/js/spa/components/SearchComponent.vue");
+/* harmony import */ var _mixins_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mixins/table */ "./resources/js/spa/mixins/table.js");
 //
 //
 //
@@ -2171,10 +2172,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_table__WEBPACK_IMPORTED_MODULE_3__["default"]],
   components: {
     SearchComponent: _SearchComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
     ConfirmDialogComponent: _ConfirmDialogComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -2187,17 +2190,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      dialog: false,
-      loading: false,
-      dialogTitle: '',
-      editedItem: {},
-      editedIndex: -1,
-      searchTerm: '',
-      page: 1,
-      totalPages: 1,
-      totalEntries: 0,
-      toEntry: 0,
-      fromEntry: 0,
       headers: [{
         text: 'ID',
         align: 'start',
@@ -2214,95 +2206,24 @@ __webpack_require__.r(__webpack_exports__);
         value: 'actions',
         sortable: false
       }],
-      categories: []
+      newItemDialogTitle: 'New Category',
+      editItemDialogTitle: 'Edit Category',
+      deleteItemDialogTitle: 'Delete Category',
+      deleteItemConfirmMessage: 'Are you sure you want to delete this category?'
     };
   },
-  mounted: function mounted() {
-    this.fetchCategories(1);
-  },
   methods: {
-    onPageChange: function onPageChange() {
-      this.fetchCategories(this.page);
-    },
-    fetchCategories: function fetchCategories(page) {
-      var _this = this;
-
-      this.loading = true;
-      axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : '')).then(function (res) {
-        _this.fromEntry = res.data.from;
-        _this.toEntry = res.data.to;
-        _this.page = res.data.current_page;
-        _this.totalEntries = res.data.total;
-        _this.totalPages = res.data.last_page;
-        _this.categories = res.data.data;
-        _this.loading = false;
-      })["catch"](function (err) {
-        _this.loading = false;
-      });
-    },
-    close: function close() {
-      this.dialog = false;
-      this.editedItem = {};
-      this.editedIndex = -1;
-    },
-    save: function save(item) {
-      var _this2 = this;
-
-      if (this.editedIndex > -1) {
-        axios.patch(this.baseUrl + '/' + item.id, {
-          'name': item.name,
-          'description': item.description
-        }).then(function (res) {
-          _this2.categories[_this2.editedIndex] = res.data.data;
-        })["catch"](function (err) {});
-      }
-
-      axios.post(this.baseUrl, {
+    postData: function postData(item) {
+      return {
         'name': item.name,
         'description': item.description
-      }).then(function (res) {
-        _this2.fetchCategories(_this2.page);
-
-        _this2.close();
-      })["catch"](function (err) {});
+      };
     },
-    newCategory: function newCategory() {
-      this.dialogTitle = 'New Category';
-      this.editedIndex = -1;
-      this.editedItem = {
+    newItemObject: function newItemObject() {
+      return {
         name: '',
         description: ''
       };
-      this.dialog = true;
-    },
-    editItem: function editItem(item) {
-      this.editedIndex = this.categories.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-      this.dialogTitle = 'Edit Category';
-    },
-    deleteItem: function deleteItem(item) {
-      var _this3 = this;
-
-      this.$refs.confirm.open({
-        title: 'Delete Category',
-        message: 'Are you sure you want to delete this category?',
-        confirmText: 'Confirm',
-        rejectText: 'Cancel'
-      }).then(function (result) {
-        if (result) {
-          axios["delete"](_this3.baseUrl + '/' + item.id).then(function (res) {
-            _this3.fetchCategories(_this3.page);
-          })["catch"](function (err) {});
-        }
-      });
-    },
-    search: function search() {
-      this.categories = [];
-      this.fetchCategories(1);
-    },
-    clearSearch: function clearSearch() {
-      this.fetchCategories(1);
     }
   }
 });
@@ -7188,7 +7109,7 @@ var render = function() {
                 staticClass: "elevation-1",
                 attrs: {
                   headers: _vm.headers,
-                  items: _vm.categories,
+                  items: _vm.entries,
                   page: _vm.page,
                   "items-per-page": _vm.totalEntries,
                   loading: _vm.loading,
@@ -7221,7 +7142,7 @@ var render = function() {
                                 "exists-url": _vm.baseUrl + "/" + "exists"
                               },
                               on: {
-                                "new-dialog": _vm.newCategory,
+                                "new-dialog": _vm.newItem,
                                 "save-dialog": function($event) {
                                   return _vm.save($event)
                                 },
@@ -69676,6 +69597,27 @@ var table = {
 
       axios.patch(this.baseUrl + '/' + item.id, this.postData(item)).then(function (res) {
         _this3.entries[_this3.editedIndex] = res.data.data;
+
+        _this3.close();
+      });
+    },
+    "delete": function _delete(item) {
+      var _this4 = this;
+
+      axios["delete"](this.baseUrl + '/' + item.id).then(function (res) {
+        _this4.fetchEntries(_this4.page);
+      })["catch"](function (err) {});
+    },
+    deleteItem: function deleteItem(item) {
+      var _this5 = this;
+
+      this.$refs.confirm.open({
+        title: this.deleteItemDialogTitle,
+        message: this.deleteItemConfirmMessage,
+        confirmText: 'Confirm',
+        rejectText: 'Cancel'
+      }).then(function (result) {
+        if (result) _this5["delete"](item);
       });
     },
     close: function close() {
@@ -69687,6 +69629,19 @@ var table = {
       this.editedIndex = -1;
       this.editedItem = this.newItemObject();
       this.dialog = true;
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.entries.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogTitle = this.editItemDialogTitle;
+      this.dialog = true;
+    },
+    search: function search() {
+      this.entries = [];
+      this.fetchEntries(1);
+    },
+    clearSearch: function clearSearch() {
+      this.fetchEntries(1);
     }
   }
 };

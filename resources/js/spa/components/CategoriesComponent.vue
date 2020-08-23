@@ -3,7 +3,7 @@
         <v-row >
             <v-col class="text-center">
                 <v-data-table :headers="headers"
-                              :items="categories"
+                              :items="entries"
                               :page="page"
                               :items-per-page="totalEntries"
                               class="elevation-1"
@@ -24,7 +24,7 @@
                                 :title="dialogTitle"
                                 :newBtn="'New Category'"
                                 :exists-url="baseUrl + '/' + 'exists'"
-                                @new-dialog="newCategory"
+                                @new-dialog="newItem"
                                 @save-dialog="save($event)"
                                 @close-dialog="close"></category-form-component>
                         </v-toolbar>
@@ -75,8 +75,10 @@
 import CategoryFormComponent from "./CategoryFormComponent";
 import ConfirmDialogComponent from "./ConfirmDialogComponent";
 import SearchComponent from "./SearchComponent";
+import table from "../mixins/table";
 
 export default {
+    mixins: [table],
     components: {
         SearchComponent,
         ConfirmDialogComponent,
@@ -89,21 +91,6 @@ export default {
     },
     data() {
         return {
-            dialog: false,
-            loading: false,
-            dialogTitle: '',
-
-            editedItem: {},
-            editedIndex: -1,
-
-            searchTerm: '',
-
-            page: 1,
-            totalPages: 1,
-            totalEntries: 0,
-            toEntry: 0,
-            fromEntry: 0,
-
             headers: [
                 {
                     text: 'ID',
@@ -115,105 +102,25 @@ export default {
                 {text: 'Description', value: 'description'},
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
-            categories: [],
+
+            newItemDialogTitle: 'New Category',
+            editItemDialogTitle: 'Edit Category',
+            deleteItemDialogTitle: 'Delete Category',
+            deleteItemConfirmMessage: 'Are you sure you want to delete this category?'
         }
     },
-    mounted() {
-        this.fetchCategories(1);
-    },
     methods: {
-        onPageChange() {
-            this.fetchCategories(this.page);
-        },
-        fetchCategories: function (page) {
-            this.loading = true;
-
-            axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : ''))
-                .then(res => {
-                    this.fromEntry = res.data.from;
-                    this.toEntry = res.data.to;
-                    this.page = res.data.current_page
-                    this.totalEntries = res.data.total
-                    this.totalPages = res.data.last_page
-
-                    this.categories = res.data.data;
-
-                    this.loading = false;
-                })
-                .catch(err => {
-                    this.loading = false;
-                })
-        },
-        close: function () {
-            this.dialog = false
-            this.editedItem = {};
-            this.editedIndex = -1;
-        },
-        save: function (item) {
-            if (this.editedIndex > -1) {
-                axios.patch(this.baseUrl + '/' + item.id, {
-                    'name': item.name,
-                    'description': item.description
-                })
-                    .then(res => {
-                        this.categories[this.editedIndex] = res.data.data
-                    })
-                    .catch(err => {
-
-                    })
-            }
-
-            axios.post(this.baseUrl, {
+        postData: function (item) {
+            return {
                 'name': item.name,
                 'description': item.description
-            })
-                .then(res => {
-                    this.fetchCategories(this.page)
-                    this.close();
-                })
-                .catch(err => {
-
-                })
+            }
         },
-        newCategory: function () {
-            this.dialogTitle = 'New Category';
-            this.editedIndex = -1;
-            this.editedItem = {
+        newItemObject: function () {
+            return {
                 name: '',
                 description: ''
-            };
-            this.dialog = true;
-        },
-        editItem: function (item) {
-            this.editedIndex = this.categories.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialog = true;
-            this.dialogTitle = 'Edit Category';
-        },
-        deleteItem: function (item) {
-            this.$refs.confirm.open({
-                title: 'Delete Category',
-                message: 'Are you sure you want to delete this category?',
-                confirmText: 'Confirm',
-                rejectText: 'Cancel'
-            }).then(result => {
-                if (result) {
-                    axios.delete(this.baseUrl + '/' + item.id)
-                        .then(res => {
-                            this.fetchCategories(this.page)
-                        })
-                        .catch(err => {
-
-                        })
-                }
-            });
-        },
-        search: function () {
-            this.categories = [];
-            this.fetchCategories(1);
-        },
-        clearSearch: function () {
-            this.fetchCategories(1);
+            }
         },
     }
 }

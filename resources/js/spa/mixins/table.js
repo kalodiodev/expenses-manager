@@ -84,7 +84,29 @@ let table = {
             axios.patch(this.baseUrl + '/' + item.id, this.postData(item))
                 .then(res => {
                     this.entries[this.editedIndex] = res.data.data
+                    this.close()
                 });
+        },
+
+        delete: function (item) {
+            axios.delete(this.baseUrl + '/' + item.id)
+                .then(res => {
+                    this.fetchEntries(this.page)
+                })
+                .catch(err => {
+
+                })
+        },
+
+        deleteItem: function (item) {
+            this.$refs.confirm.open({
+                title: this.deleteItemDialogTitle,
+                message: this.deleteItemConfirmMessage,
+                confirmText: 'Confirm',
+                rejectText: 'Cancel'
+            }).then(result => {
+                if (result) this.delete(item)
+            });
         },
 
         close: function () {
@@ -97,6 +119,22 @@ let table = {
             this.editedIndex = -1;
             this.editedItem = this.newItemObject()
             this.dialog = true;
+        },
+
+        editItem: function (item) {
+            this.editedIndex = this.entries.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.dialogTitle = this.editItemDialogTitle;
+            this.dialog = true;
+        },
+
+        search: function () {
+            this.entries = [];
+            this.fetchEntries(1);
+        },
+
+        clearSearch: function () {
+            this.fetchEntries(1);
         },
     },
 }
