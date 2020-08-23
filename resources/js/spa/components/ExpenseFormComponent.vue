@@ -22,6 +22,14 @@
                     </v-col>
 
                     <v-col cols="12" md="6">
+                        <v-select
+                            :items="categories"
+                            item-text="name"
+                            item-value="id"
+                            v-model="editedItem.category_id"
+                            label="Category"
+                        ></v-select>
+
                         <v-textarea
                             v-model="editedItem.description"
                             :rows="3"
@@ -63,13 +71,23 @@ export default {
         },
         editedItem: {
             type: Object
-        }
+        },
+    },
+    mounted() {
+        this.fetchCategories()
     },
     data() {
         return {
+            categories: []
         }
     },
     methods: {
+        fetchCategories: function () {
+            axios.get('/expense-categories?nopagination=1')
+                .then(res => {
+                    this.categories = res.data;
+                });
+        },
         newDialog() {
             this.$emit('new-dialog');
         },

@@ -2540,6 +2540,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     dialog: {
@@ -2557,10 +2565,22 @@ __webpack_require__.r(__webpack_exports__);
       type: Object
     }
   },
+  mounted: function mounted() {
+    this.fetchCategories();
+  },
   data: function data() {
-    return {};
+    return {
+      categories: []
+    };
   },
   methods: {
+    fetchCategories: function fetchCategories() {
+      var _this = this;
+
+      axios.get('/expense-categories?nopagination=1').then(function (res) {
+        _this.categories = res.data;
+      });
+    },
     newDialog: function newDialog() {
       this.$emit('new-dialog');
     },
@@ -2682,6 +2702,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Description',
         value: 'description'
       }, {
+        text: 'Category',
+        value: 'category.name'
+      }, {
         text: 'Cost',
         value: 'cost'
       }, {
@@ -2699,14 +2722,16 @@ __webpack_require__.r(__webpack_exports__);
       return {
         'date': item.date,
         'description': item.description,
-        'cost': item.cost
+        'cost': item.cost,
+        'category_id': item.category_id
       };
     },
     newItemObject: function newItemObject() {
       return {
         date: this.editedItem.date = new Date().toISOString().substr(0, 10),
         description: '',
-        cost: ''
+        cost: '',
+        category_id: 0
       };
     }
   }
@@ -6917,6 +6942,22 @@ var render = function() {
                     "v-col",
                     { attrs: { cols: "12", md: "6" } },
                     [
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.categories,
+                          "item-text": "name",
+                          "item-value": "id",
+                          label: "Category"
+                        },
+                        model: {
+                          value: _vm.editedItem.category_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.editedItem, "category_id", $$v)
+                          },
+                          expression: "editedItem.category_id"
+                        }
+                      }),
+                      _vm._v(" "),
                       _c("v-textarea", {
                         attrs: { rows: 3, label: "Description" },
                         model: {

@@ -93,6 +93,7 @@
                         value: 'date',
                     },
                     {text: 'Description', value: 'description'},
+                    {text: 'Category', value: 'category.name'},
                     {text: 'Cost', value: 'cost'},
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
@@ -106,14 +107,16 @@
                 return {
                     'date': item.date,
                     'description': item.description,
-                    'cost': item.cost
+                    'cost': item.cost,
+                    'category_id': item.category_id
                 }
             },
             newItemObject: function () {
                 return {
                     date: this.editedItem.date = new Date().toISOString().substr(0,10),
                     description: '',
-                    cost: ''
+                    cost: '',
+                    category_id: 0
                 }
             }
         }

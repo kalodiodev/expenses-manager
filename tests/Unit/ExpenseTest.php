@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\User;
 use App\Expense;
 use Tests\TestCase;
+use App\ExpenseCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExpenseTest extends TestCase
@@ -17,6 +18,14 @@ class ExpenseTest extends TestCase
         $expense = factory(Expense::class)->create();
 
         $this->assertInstanceOf(User::class, $expense->user);
+    }
+
+    /** @test */
+    public function an_expense_belongs_to_a_category()
+    {
+        $expense = factory(Expense::class)->create();
+
+        $this->assertInstanceOf(ExpenseCategory::class, $expense->category);
     }
 
     /** @test */

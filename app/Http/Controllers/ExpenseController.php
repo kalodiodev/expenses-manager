@@ -34,7 +34,7 @@ class ExpenseController extends Controller
     {
         return auth()->user()
             ->expenses()
-            ->create($request->only(['date', 'description', 'cost']));
+            ->create($request->only(['category_id', 'date', 'description', 'cost']));
     }
 
     /**
@@ -50,9 +50,9 @@ class ExpenseController extends Controller
             abort(404, 'Expense not found.');
         }
 
-        $expense->update($request->only(['date', 'description', 'cost']));
+        $expense->update($request->only(['category_id', 'date', 'description', 'cost']));
 
-        return $expense;
+        return $expense->fresh();
     }
 
     /**

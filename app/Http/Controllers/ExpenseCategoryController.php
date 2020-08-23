@@ -18,7 +18,13 @@ class ExpenseCategoryController extends Controller
     {
         $search = \request()->get('search') ?: '';
 
-        return auth()->user()->expenseCategories()->search($search)->paginate();
+        $categories = auth()->user()->expenseCategories()->search($search);
+
+        if (\request()->has('nopagination')) {
+            return $categories->get();
+        }
+
+        return $categories->paginate();
     }
 
     /**

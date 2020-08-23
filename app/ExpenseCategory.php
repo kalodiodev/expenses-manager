@@ -18,8 +18,15 @@ class ExpenseCategory extends Model
      */
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = ['user_id', 'created_at', 'updated_at'];
 
     /**
      * An expense category belongs to a user
@@ -29,6 +36,16 @@ class ExpenseCategory extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * An expense category has many expenses
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class, 'category_id', 'id');
     }
 
     /**
