@@ -2717,6 +2717,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExpenseFormComponent */ "./resources/js/spa/components/ExpenseFormComponent.vue");
+/* harmony import */ var _mixins_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/table */ "./resources/js/spa/mixins/table.js");
 //
 //
 //
@@ -2767,27 +2768,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_table__WEBPACK_IMPORTED_MODULE_1__["default"]],
   components: {
     ExpenseFormComponent: _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  mounted: function mounted() {
-    this.fetchEntries(this.page);
-  },
   data: function data() {
     return {
-      dialog: false,
-      loading: false,
-      page: 1,
-      totalPages: 1,
-      totalEntries: 0,
-      toEntry: 0,
-      fromEntry: 0,
-      searchTerm: '',
       baseUrl: '/expenses',
-      dialogTitle: '',
-      editedItem: {},
-      editedIndex: -1,
       headers: [{
         text: 'Date',
         align: 'start',
@@ -2804,66 +2793,23 @@ __webpack_require__.r(__webpack_exports__);
         value: 'actions',
         sortable: false
       }],
-      entries: []
+      newItemDialogTitle: 'New Expense'
     };
   },
   methods: {
-    onPageChange: function onPageChange() {
-      this.fetchEntries(this.page);
-    },
-    fetchEntries: function fetchEntries(page) {
-      var _this = this;
-
-      this.loading = true;
-      axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : '')).then(function (res) {
-        _this.fromEntry = res.data.from;
-        _this.toEntry = res.data.to;
-        _this.page = res.data.current_page;
-        _this.totalEntries = res.data.total;
-        _this.totalPages = res.data.last_page;
-        _this.entries = res.data.data;
-        _this.loading = false;
-      })["catch"](function (err) {
-        _this.loading = false;
-      });
-    },
-    close: function close() {
-      this.dialog = false;
-      this.editedItem = {};
-      this.editedIndex = -1;
-    },
-    save: function save(item) {
-      var _this2 = this;
-
-      if (this.editedIndex > -1) {
-        axios.patch(this.baseUrl + '/' + item.id, {
-          'date': item.date,
-          'description': item.description,
-          'cost': item.cost
-        }).then(function (res) {
-          _this2.entries[_this2.editedIndex] = res.data.data;
-        })["catch"](function (err) {});
-      }
-
-      axios.post(this.baseUrl, {
+    postData: function postData(item) {
+      return {
         'date': item.date,
         'description': item.description,
         'cost': item.cost
-      }).then(function (res) {
-        _this2.fetchEntries(_this2.page);
-
-        _this2.close();
-      })["catch"](function (err) {});
+      };
     },
-    newExpense: function newExpense() {
-      this.dialogTitle = 'New Expense';
-      this.editedIndex = -1;
-      this.editedItem = {
+    newItemObject: function newItemObject() {
+      return {
         date: this.editedItem.date = new Date().toISOString().substr(0, 10),
         description: '',
         cost: ''
       };
-      this.dialog = true;
     }
   }
 });
@@ -7941,7 +7887,7 @@ var render = function() {
                                 "new-btn": "New Expense"
                               },
                               on: {
-                                "new-dialog": _vm.newExpense,
+                                "new-dialog": _vm.newItem,
                                 "save-dialog": function($event) {
                                   return _vm.save($event)
                                 },
@@ -69643,6 +69589,108 @@ module.exports = JSON.parse("{\"Dashboard\":\"Πίνακας Ελέγχου\",\"
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"Dashboard\":\"Dashboard\",\"Expense Categories\":\"Expense Categories\",\"Income Categories\":\"Income Categories\",\"Expenses\":\"Expenses\",\"Search\":\"Search\"}");
+
+/***/ }),
+
+/***/ "./resources/js/spa/mixins/table.js":
+/*!******************************************!*\
+  !*** ./resources/js/spa/mixins/table.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var table = {
+  mounted: function mounted() {
+    this.fetchEntries(this.page);
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      loading: false,
+      searchTerm: '',
+      dialogTitle: '',
+      page: 1,
+      totalPages: 1,
+      totalEntries: 0,
+      toEntry: 0,
+      fromEntry: 0,
+      entries: [],
+      editedItem: {},
+      editedIndex: -1
+    };
+  },
+  methods: {
+    onPageChange: function onPageChange() {
+      this.fetchEntries(this.page);
+    },
+    entriesUrl: function entriesUrl(page) {
+      return this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : '');
+    },
+    fetchEntries: function fetchEntries(page) {
+      var _this = this;
+
+      this.loading = true;
+      axios.get(this.entriesUrl(page)).then(function (res) {
+        _this.setPageInfo(res.data);
+
+        _this.entries = res.data.data;
+        _this.loading = false;
+      })["catch"](function (err) {
+        _this.loading = false;
+      });
+    },
+    setPageInfo: function setPageInfo(data) {
+      this.fromEntry = data.from;
+      this.toEntry = data.to;
+      this.page = data.current_page;
+      this.totalEntries = data.total;
+      this.totalPages = data.last_page;
+    },
+    clearEditedItem: function clearEditedItem() {
+      this.editedItem = {};
+      this.editedIndex = -1;
+    },
+    isUpdate: function isUpdate() {
+      return this.editedIndex > -1;
+    },
+    save: function save(item) {
+      if (this.isUpdate()) {
+        this.update(item);
+      } else {
+        this.store(item);
+      }
+    },
+    store: function store(item) {
+      var _this2 = this;
+
+      axios.post(this.baseUrl, this.postData(item)).then(function (res) {
+        _this2.fetchEntries(_this2.page);
+
+        _this2.close();
+      })["catch"](function (err) {});
+    },
+    update: function update(item) {
+      var _this3 = this;
+
+      axios.patch(this.baseUrl + '/' + item.id, this.postData(item)).then(function (res) {
+        _this3.entries[_this3.editedIndex] = res.data.data;
+      });
+    },
+    close: function close() {
+      this.dialog = false;
+      this.clearEditedItem();
+    },
+    newItem: function newItem() {
+      this.dialogTitle = this.newItemDialogTitle;
+      this.editedIndex = -1;
+      this.editedItem = this.newItemObject();
+      this.dialog = true;
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (table);
 
 /***/ }),
 

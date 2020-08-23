@@ -23,7 +23,7 @@
                                 :editedItem="editedItem"
                                 :title="dialogTitle"
                                 :new-btn="'New Expense'"
-                                @new-dialog="newExpense"
+                                @new-dialog="newItem"
                                 @save-dialog="save($event)"
                                 @close-dialog="close"></expense-form-component>
                         </v-toolbar>
@@ -49,27 +49,14 @@
 
 <script>
     import ExpenseFormComponent from "./ExpenseFormComponent";
+    import table from "../mixins/table";
+
     export default {
+        mixins: [table],
         components: {ExpenseFormComponent},
-        mounted() {
-            this.fetchEntries(this.page);
-        },
         data() {
             return {
-                dialog: false,
-                loading: false,
-                page: 1,
-                totalPages: 1,
-                totalEntries: 0,
-                toEntry: 0,
-                fromEntry: 0,
-                searchTerm: '',
                 baseUrl: '/expenses',
-                dialogTitle: '',
-
-                editedItem: {},
-                editedIndex: -1,
-
                 headers: [
                     {
                         text: 'Date',
@@ -81,75 +68,24 @@
                     {text: 'Cost', value: 'cost'},
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
-                entries: [],
+                newItemDialogTitle: 'New Expense'
             }
         },
         methods: {
-            onPageChange() {
-                this.fetchEntries(this.page);
-            },
-            fetchEntries: function (page) {
-                this.loading = true;
-
-                axios.get(this.baseUrl + '?page=' + page + "&search=" + (this.searchTerm ? this.searchTerm : ''))
-                    .then(res => {
-                        this.fromEntry = res.data.from;
-                        this.toEntry = res.data.to;
-                        this.page = res.data.current_page
-                        this.totalEntries = res.data.total
-                        this.totalPages = res.data.last_page
-
-                        this.entries = res.data.data;
-
-                        this.loading = false;
-                    })
-                    .catch(err => {
-                        this.loading = false;
-                    })
-            },
-            close: function () {
-                this.dialog = false
-                this.editedItem = {};
-                this.editedIndex = -1;
-            },
-            save: function (item) {
-                if (this.editedIndex > -1) {
-                    axios.patch(this.baseUrl + '/' + item.id, {
-                        'date': item.date,
-                        'description': item.description,
-                        'cost': item.cost
-                    })
-                        .then(res => {
-                            this.entries[this.editedIndex] = res.data.data
-                        })
-                        .catch(err => {
-
-                        })
-                }
-
-                axios.post(this.baseUrl, {
+            postData: function (item) {
+                return {
                     'date': item.date,
                     'description': item.description,
                     'cost': item.cost
-                })
-                    .then(res => {
-                        this.fetchEntries(this.page)
-                        this.close();
-                    })
-                    .catch(err => {
-
-                    })
+                }
             },
-            newExpense: function () {
-                this.dialogTitle = 'New Expense';
-                this.editedIndex = -1;
-                this.editedItem = {
+            newItemObject: function () {
+                return {
                     date: this.editedItem.date = new Date().toISOString().substr(0,10),
                     description: '',
                     cost: ''
-                };
-                this.dialog = true;
-            },
+                }
+            }
         }
     }
 </script>
