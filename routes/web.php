@@ -31,4 +31,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/income-categories/exists', 'IncomeCategoryController@exists')->name('income.category.exists');
 
     Route::get('/expenses', 'ExpenseController@index')->name('expenses');
+    Route::post('/expenses', 'ExpenseController@store');
 });

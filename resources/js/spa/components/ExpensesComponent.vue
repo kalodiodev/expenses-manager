@@ -18,6 +18,14 @@
 
                             <v-spacer></v-spacer>
 
+                            <expense-form-component
+                                :dialog="dialog"
+                                :editedItem="editedItem"
+                                :title="dialogTitle"
+                                :new-btn="'New Expense'"
+                                @new-dialog="newExpense"
+                                @save-dialog="save($event)"
+                                @close-dialog="close"></expense-form-component>
                         </v-toolbar>
                     </template>
                 </v-data-table>
@@ -40,12 +48,15 @@
 </template>
 
 <script>
+    import ExpenseFormComponent from "./ExpenseFormComponent";
     export default {
+        components: {ExpenseFormComponent},
         mounted() {
             this.fetchEntries(this.page);
         },
         data() {
             return {
+                dialog: false,
                 loading: false,
                 page: 1,
                 totalPages: 1,
@@ -54,6 +65,10 @@
                 fromEntry: 0,
                 searchTerm: '',
                 baseUrl: '/expenses',
+                dialogTitle: '',
+
+                editedItem: {},
+                editedIndex: -1,
 
                 headers: [
                     {
@@ -91,7 +106,50 @@
                     .catch(err => {
                         this.loading = false;
                     })
-            }
+            },
+            close: function () {
+                this.dialog = false
+                this.editedItem = {};
+                this.editedIndex = -1;
+            },
+            save: function (item) {
+                if (this.editedIndex > -1) {
+                    axios.patch(this.baseUrl + '/' + item.id, {
+                        'date': item.date,
+                        'description': item.description,
+                        'cost': item.cost
+                    })
+                        .then(res => {
+                            this.entries[this.editedIndex] = res.data.data
+                        })
+                        .catch(err => {
+
+                        })
+                }
+
+                axios.post(this.baseUrl, {
+                    'date': item.date,
+                    'description': item.description,
+                    'cost': item.cost
+                })
+                    .then(res => {
+                        this.fetchEntries(this.page)
+                        this.close();
+                    })
+                    .catch(err => {
+
+                    })
+            },
+            newExpense: function () {
+                this.dialogTitle = 'New Expense';
+                this.editedIndex = -1;
+                this.editedItem = {
+                    date: this.editedItem.date = new Date().toISOString().substr(0,10),
+                    description: '',
+                    cost: ''
+                };
+                this.dialog = true;
+            },
         }
     }
 </script>
