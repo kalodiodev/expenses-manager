@@ -83,7 +83,7 @@ let table = {
         update: function (item) {
             axios.patch(this.baseUrl + '/' + item.id, this.postData(item))
                 .then(res => {
-                    this.entries[this.editedIndex] = res.data.data
+                    this.$set(this.entries, this.editedIndex, res.data)
                     this.close()
                 });
         },

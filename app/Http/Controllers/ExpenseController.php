@@ -38,6 +38,24 @@ class ExpenseController extends Controller
     }
 
     /**
+     * Update Expense
+     *
+     * @param Expense $expense
+     * @param Request $request
+     * @return Expense
+     */
+    public function update(Expense $expense, Request $request)
+    {
+        if ($expense->user->id != auth()->user()->id) {
+            abort(404, 'Expense not found.');
+        }
+
+        $expense->update($request->only(['date', 'description', 'cost']));
+
+        return $expense;
+    }
+
+    /**
      * Delete Expense
      *
      * @param Expense $expense

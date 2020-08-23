@@ -68892,7 +68892,7 @@ var table = {
       var _this3 = this;
 
       axios.patch(this.baseUrl + '/' + item.id, this.postData(item)).then(function (res) {
-        _this3.entries[_this3.editedIndex] = res.data.data;
+        _this3.$set(_this3.entries, _this3.editedIndex, res.data);
 
         _this3.close();
       });
