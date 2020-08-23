@@ -38,4 +38,23 @@ class ExpenseIndexTest extends IntegrationTestCase
         $this->getJson(route('expenses'))
             ->assertUnauthorized();
     }
+
+    /** @test */
+    public function a_user_can_search_expenses()
+    {
+        $user = $this->signIn();
+
+        factory(Expense::class)->create([
+            'user_id' => $user->id,
+            'description' => 'Test'
+        ]);
+
+        factory(Expense::class)->create([
+            'user_id' => $user->id,
+            'description' => 'Other'
+        ]);
+
+        $this->getJson(route('expenses', ['search' => 'Test']))
+            ->assertJsonCount(1, 'data');
+    }
 }

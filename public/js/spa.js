@@ -2586,6 +2586,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExpenseFormComponent */ "./resources/js/spa/components/ExpenseFormComponent.vue");
 /* harmony import */ var _mixins_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/table */ "./resources/js/spa/mixins/table.js");
+/* harmony import */ var _SearchComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchComponent */ "./resources/js/spa/components/SearchComponent.vue");
 //
 //
 //
@@ -2635,12 +2636,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_table__WEBPACK_IMPORTED_MODULE_1__["default"]],
   components: {
-    ExpenseFormComponent: _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ExpenseFormComponent: _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SearchComponent: _SearchComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -7028,7 +7035,18 @@ var render = function() {
                             })
                           ],
                           1
-                        )
+                        ),
+                        _vm._v(" "),
+                        _c("search-component", {
+                          on: { search: _vm.search, cleared: _vm.clearSearch },
+                          model: {
+                            value: _vm.searchTerm,
+                            callback: function($$v) {
+                              _vm.searchTerm = $$v
+                            },
+                            expression: "searchTerm"
+                          }
+                        })
                       ]
                     },
                     proxy: true

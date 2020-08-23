@@ -26,4 +26,16 @@ class Expense extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Search expenses
+     *
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('description', 'LIKE', '%' . $term . '%');
+    }
 }

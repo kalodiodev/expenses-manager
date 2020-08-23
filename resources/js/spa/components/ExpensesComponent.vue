@@ -27,6 +27,10 @@
                                 @save-dialog="save($event)"
                                 @close-dialog="close"></expense-form-component>
                         </v-toolbar>
+
+                        <search-component v-model="searchTerm"
+                                          @search="search"
+                                          @cleared="clearSearch"></search-component>
                     </template>
                 </v-data-table>
 
@@ -50,10 +54,14 @@
 <script>
     import ExpenseFormComponent from "./ExpenseFormComponent";
     import table from "../mixins/table";
+    import SearchComponent from "./SearchComponent";
 
     export default {
         mixins: [table],
-        components: {ExpenseFormComponent},
+        components: {
+            ExpenseFormComponent,
+            SearchComponent
+        },
         data() {
             return {
                 baseUrl: '/expenses',

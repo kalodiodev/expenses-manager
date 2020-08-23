@@ -13,8 +13,11 @@ class ExpenseController extends Controller
      */
     public function index()
     {
+        $search = \request()->get('search') ?: '';
+
         return auth()->user()
             ->expenses()
+            ->search($search)
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(20);

@@ -18,4 +18,15 @@ class ExpenseTest extends TestCase
 
         $this->assertInstanceOf(User::class, $expense->user);
     }
+
+    /** @test */
+    public function it_finds_categories_that_contain_given_term()
+    {
+        factory(Expense::class)->create(['description' => 'Test1']);
+        factory(Expense::class)->create(['description' => 'Test2']);
+
+        $expenses = Expense::search('Test1');
+
+        $this->assertEquals(1, $expenses->count());
+    }
 }
