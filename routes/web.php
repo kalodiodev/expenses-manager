@@ -32,4 +32,5 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/expenses', 'ExpenseController@index')->name('expenses');
     Route::post('/expenses', 'ExpenseController@store');
+    Route::delete('/expenses/{expense}', 'ExpenseController@destroy')->name('expense');
 });

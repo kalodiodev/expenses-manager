@@ -32,6 +32,22 @@
                                           @search="search"
                                           @cleared="clearSearch"></search-component>
                     </template>
+
+                    <template v-slot:item.actions="{ item }">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="editItem(item)"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon
+                            small
+                            @click="deleteItem(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
                 </v-data-table>
 
                 <div class="text-center mt-3">
@@ -48,19 +64,23 @@
                 </div>
             </v-col>
         </v-row>
+
+        <confirm-dialog-component ref="confirm"></confirm-dialog-component>
     </v-container>
 </template>
 
 <script>
     import ExpenseFormComponent from "./ExpenseFormComponent";
-    import table from "../mixins/table";
+    import ConfirmDialogComponent from "./ConfirmDialogComponent";
     import SearchComponent from "./SearchComponent";
+    import table from "../mixins/table";
 
     export default {
         mixins: [table],
         components: {
             ExpenseFormComponent,
-            SearchComponent
+            SearchComponent,
+            ConfirmDialogComponent
         },
         data() {
             return {
@@ -76,7 +96,9 @@
                     {text: 'Cost', value: 'cost'},
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
-                newItemDialogTitle: 'New Expense'
+                newItemDialogTitle: 'New Expense',
+                deleteItemDialogTitle: 'Delete Expense',
+                deleteItemConfirmMessage: 'Are you sure you want to delete this expense?'
             }
         },
         methods: {

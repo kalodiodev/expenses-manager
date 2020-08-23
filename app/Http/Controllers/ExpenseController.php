@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Expense;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -34,5 +35,23 @@ class ExpenseController extends Controller
         return auth()->user()
             ->expenses()
             ->create($request->only(['date', 'description', 'cost']));
+    }
+
+    /**
+     * Delete Expense
+     *
+     * @param Expense $expense
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(Expense $expense)
+    {
+        if ($expense->user->id != auth()->user()->id) {
+            abort(404, 'Expense not found.');
+        }
+
+        $expense->delete();
+
+        return response()->noContent();
     }
 }

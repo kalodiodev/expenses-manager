@@ -2585,8 +2585,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExpenseFormComponent */ "./resources/js/spa/components/ExpenseFormComponent.vue");
-/* harmony import */ var _mixins_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/table */ "./resources/js/spa/mixins/table.js");
+/* harmony import */ var _ConfirmDialogComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ConfirmDialogComponent */ "./resources/js/spa/components/ConfirmDialogComponent.vue");
 /* harmony import */ var _SearchComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchComponent */ "./resources/js/spa/components/SearchComponent.vue");
+/* harmony import */ var _mixins_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mixins/table */ "./resources/js/spa/mixins/table.js");
 //
 //
 //
@@ -2640,14 +2641,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_table__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  mixins: [_mixins_table__WEBPACK_IMPORTED_MODULE_3__["default"]],
   components: {
     ExpenseFormComponent: _ExpenseFormComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
-    SearchComponent: _SearchComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+    SearchComponent: _SearchComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ConfirmDialogComponent: _ConfirmDialogComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2668,7 +2689,9 @@ __webpack_require__.r(__webpack_exports__);
         value: 'actions',
         sortable: false
       }],
-      newItemDialogTitle: 'New Expense'
+      newItemDialogTitle: 'New Expense',
+      deleteItemDialogTitle: 'Delete Expense',
+      deleteItemConfirmMessage: 'Are you sure you want to delete this expense?'
     };
   },
   methods: {
@@ -7050,6 +7073,48 @@ var render = function() {
                       ]
                     },
                     proxy: true
+                  },
+                  {
+                    key: "item.actions",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c(
+                          "v-icon",
+                          {
+                            staticClass: "mr-2",
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.editItem(item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        mdi-pencil\n                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteItem(item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        mdi-delete\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    }
                   }
                 ])
               }),
@@ -7090,7 +7155,9 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("confirm-dialog-component", { ref: "confirm" })
     ],
     1
   )
