@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Expense;
-use Illuminate\Http\Request;
+use App\Http\Requests\ExpenseRequest;
 
 class ExpenseController extends Controller
 {
@@ -27,10 +27,10 @@ class ExpenseController extends Controller
     /**
      * Store Expense
      *
-     * @param Request $request
+     * @param ExpenseRequest $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(ExpenseRequest $request)
     {
         return auth()->user()
             ->expenses()
@@ -41,10 +41,10 @@ class ExpenseController extends Controller
      * Update Expense
      *
      * @param Expense $expense
-     * @param Request $request
+     * @param ExpenseRequest $request
      * @return Expense
      */
-    public function update(Expense $expense, Request $request)
+    public function update(Expense $expense, ExpenseRequest $request)
     {
         if ($expense->user->id != auth()->user()->id) {
             abort(404, 'Expense not found.');
