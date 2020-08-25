@@ -25,6 +25,24 @@ class ExpenseCreateTest extends IntegrationTestCase
     }
 
     /** @test */
+    public function an_expense_requires_a_category()
+    {
+        $this->signIn();
+
+        $this->postJson(route('expenses'), factory(Expense::class)->raw(['category_id' => '']))
+            ->assertJsonValidationErrors('category_id');
+    }
+
+    /** @test */
+    public function an_expense_requires_a_category_that_exists()
+    {
+        $this->signIn();
+
+        $this->postJson(route('expenses'), factory(Expense::class)->raw(['category_id' => 100]))
+            ->assertJsonValidationErrors('category_id');
+    }
+
+    /** @test */
     public function an_expense_requires_a_valid_date()
     {
         $this->signIn();
