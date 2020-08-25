@@ -116,7 +116,7 @@
                     date: this.editedItem.date = new Date().toISOString().substr(0,10),
                     description: '',
                     cost: '',
-                    category_id: 0
+                    category_id: null
                 }
             }
         }

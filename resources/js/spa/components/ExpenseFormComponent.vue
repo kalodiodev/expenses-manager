@@ -28,17 +28,26 @@
                             item-value="id"
                             v-model="editedItem.category_id"
                             label="Category"
+                            :error-messages="categoryErrors"
+                            @change="$v.editedItem.category_id.$touch()"
+                            @blur="$v.editedItem.category_id.$touch()"
                         ></v-select>
 
                         <v-textarea
                             v-model="editedItem.description"
                             :rows="3"
+                            :error-messages="descriptionErrors"
+                            @input="$v.editedItem.description.$touch()"
+                            @blur="$v.editedItem.description.$touch()"
                             label="Description"></v-textarea>
 
                         <v-text-field
                             v-model="editedItem.cost"
                             type="number"
                             step="0.01"
+                            :error-messages="costErrors"
+                            @input="$v.editedItem.cost.$touch()"
+                            @blur="$v.editedItem.cost.$touch()"
                             label="Cost"></v-text-field>
 
                     </v-col>
@@ -56,6 +65,11 @@
 </template>
 
 <script>
+import required from "vuelidate/lib/validators/required";
+import maxLength from "vuelidate/lib/validators/maxLength";
+import decimal from "vuelidate/lib/validators/decimal";
+const positive = (value) => value >= 0
+
 export default {
     props: {
         dialog: {
@@ -78,7 +92,22 @@ export default {
     },
     data() {
         return {
-            categories: []
+            categories: [],
+        }
+    },
+    validations: {
+        editedItem: {
+            category_id: {
+                required,
+            },
+            description: {
+                maxLength: maxLength(190)
+            },
+            cost: {
+                positive,
+                required,
+                decimal
+            }
         }
     },
     methods: {
@@ -92,11 +121,44 @@ export default {
             this.$emit('new-dialog');
         },
         close() {
+            this.$v.$reset();
+
             this.$emit('close-dialog');
         },
         save() {
+            this.$v.editedItem.$touch();
+
+            if (this.$v.editedItem.$invalid) return;
+
+            this.$v.$reset();
+
             this.$emit('save-dialog', this.editedItem);
         },
+    },
+    computed: {
+        categoryErrors() {
+            const errors = []
+            if (!this.$v.editedItem.category_id.$dirty) return errors
+            !this.$v.editedItem.category_id.required && errors.push('Category is required.')
+
+            return errors
+        },
+        descriptionErrors() {
+            const errors = []
+            if (!this.$v.editedItem.description.$dirty) return errors
+            !this.$v.editedItem.description.maxLength && errors.push('Description must be at most 190 characters long.')
+
+            return errors
+        },
+        costErrors() {
+            const errors = []
+            if (!this.$v.editedItem.cost.$dirty) return errors
+            !this.$v.editedItem.cost.required && errors.push('Cost is required.')
+            !this.$v.editedItem.cost.decimal && errors.push('Cost must be a number.')
+            !this.$v.editedItem.cost.positive && errors.push('Cost must be positive.')
+
+            return errors
+        }
     }
 }
 </script>

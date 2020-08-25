@@ -2491,6 +2491,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators/required */ "./node_modules/vuelidate/lib/validators/required.js");
+/* harmony import */ var vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators/maxLength */ "./node_modules/vuelidate/lib/validators/maxLength.js");
+/* harmony import */ var vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuelidate_lib_validators_decimal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators/decimal */ "./node_modules/vuelidate/lib/validators/decimal.js");
+/* harmony import */ var vuelidate_lib_validators_decimal__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators_decimal__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -2548,6 +2554,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+var positive = function positive(value) {
+  return value >= 0;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     dialog: {
@@ -2573,6 +2596,21 @@ __webpack_require__.r(__webpack_exports__);
       categories: []
     };
   },
+  validations: {
+    editedItem: {
+      category_id: {
+        required: vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0___default.a
+      },
+      description: {
+        maxLength: vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1___default()(190)
+      },
+      cost: {
+        positive: positive,
+        required: vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0___default.a,
+        decimal: vuelidate_lib_validators_decimal__WEBPACK_IMPORTED_MODULE_2___default.a
+      }
+    }
+  },
   methods: {
     fetchCategories: function fetchCategories() {
       var _this = this;
@@ -2585,10 +2623,36 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('new-dialog');
     },
     close: function close() {
+      this.$v.$reset();
       this.$emit('close-dialog');
     },
     save: function save() {
+      this.$v.editedItem.$touch();
+      if (this.$v.editedItem.$invalid) return;
+      this.$v.$reset();
       this.$emit('save-dialog', this.editedItem);
+    }
+  },
+  computed: {
+    categoryErrors: function categoryErrors() {
+      var errors = [];
+      if (!this.$v.editedItem.category_id.$dirty) return errors;
+      !this.$v.editedItem.category_id.required && errors.push('Category is required.');
+      return errors;
+    },
+    descriptionErrors: function descriptionErrors() {
+      var errors = [];
+      if (!this.$v.editedItem.description.$dirty) return errors;
+      !this.$v.editedItem.description.maxLength && errors.push('Description must be at most 190 characters long.');
+      return errors;
+    },
+    costErrors: function costErrors() {
+      var errors = [];
+      if (!this.$v.editedItem.cost.$dirty) return errors;
+      !this.$v.editedItem.cost.required && errors.push('Cost is required.');
+      !this.$v.editedItem.cost.decimal && errors.push('Cost must be a number.');
+      !this.$v.editedItem.cost.positive && errors.push('Cost must be positive.');
+      return errors;
     }
   }
 });
@@ -2731,7 +2795,7 @@ __webpack_require__.r(__webpack_exports__);
         date: this.editedItem.date = new Date().toISOString().substr(0, 10),
         description: '',
         cost: '',
-        category_id: 0
+        category_id: null
       };
     }
   }
@@ -6947,7 +7011,16 @@ var render = function() {
                           items: _vm.categories,
                           "item-text": "name",
                           "item-value": "id",
-                          label: "Category"
+                          label: "Category",
+                          "error-messages": _vm.categoryErrors
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.$v.editedItem.category_id.$touch()
+                          },
+                          blur: function($event) {
+                            return _vm.$v.editedItem.category_id.$touch()
+                          }
                         },
                         model: {
                           value: _vm.editedItem.category_id,
@@ -6959,7 +7032,19 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("v-textarea", {
-                        attrs: { rows: 3, label: "Description" },
+                        attrs: {
+                          rows: 3,
+                          "error-messages": _vm.descriptionErrors,
+                          label: "Description"
+                        },
+                        on: {
+                          input: function($event) {
+                            return _vm.$v.editedItem.description.$touch()
+                          },
+                          blur: function($event) {
+                            return _vm.$v.editedItem.description.$touch()
+                          }
+                        },
                         model: {
                           value: _vm.editedItem.description,
                           callback: function($$v) {
@@ -6970,7 +7055,20 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("v-text-field", {
-                        attrs: { type: "number", step: "0.01", label: "Cost" },
+                        attrs: {
+                          type: "number",
+                          step: "0.01",
+                          "error-messages": _vm.costErrors,
+                          label: "Cost"
+                        },
+                        on: {
+                          input: function($event) {
+                            return _vm.$v.editedItem.cost.$touch()
+                          },
+                          blur: function($event) {
+                            return _vm.$v.editedItem.cost.$touch()
+                          }
+                        },
                         model: {
                           value: _vm.editedItem.cost,
                           callback: function($$v) {
@@ -23371,6 +23469,29 @@ var regex = function regex(type, expr) {
 };
 
 exports.regex = regex;
+
+/***/ }),
+
+/***/ "./node_modules/vuelidate/lib/validators/decimal.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/vuelidate/lib/validators/decimal.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _common = __webpack_require__(/*! ./common */ "./node_modules/vuelidate/lib/validators/common.js");
+
+var _default = (0, _common.regex)('decimal', /^[-]?\d*(\.\d+)?$/);
+
+exports.default = _default;
 
 /***/ }),
 
