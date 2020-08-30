@@ -32,6 +32,16 @@ class IncomeCategory extends Model
     }
 
     /**
+     * An income category has many incomes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function incomes()
+    {
+        return $this->hasMany(Income::class, 'category_id', 'id');
+    }
+
+    /**
      * Search categories
      *
      * @param $query
