@@ -50,4 +50,15 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
         $this->getJson(route('income.categories', ['search' => 'Test']))
             ->assertJsonCount(1, 'data');
     }
+
+    /** @test */
+    public function a_user_can_index_income_categories_with_no_pagination()
+    {
+        $user = $this->signIn();
+
+        factory(IncomeCategory::class, 50)->create(['user_id' => $user->id]);
+
+        $response = $this->getJson(route('income.categories', ['nopagination']))
+            ->assertJsonCount(50);
+    }
 }

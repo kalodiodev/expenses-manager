@@ -7,6 +7,36 @@ use Illuminate\Database\Eloquent\Model;
 class Income extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'date',
+        'description',
+        'amount',
+        'category_id'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'user_id', 'user'
+    ];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'category'
+    ];
+
+    /**
      * An income belongs to a user
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

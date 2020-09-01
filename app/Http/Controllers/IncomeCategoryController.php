@@ -18,7 +18,13 @@ class IncomeCategoryController extends Controller
     {
         $search = \request()->get('search') ?: '';
 
-        return auth()->user()->incomeCategories()->search($search)->paginate();
+        $categories = auth()->user()->incomeCategories()->search($search);
+
+        if (\request()->has('nopagination')) {
+            return $categories->get();
+        }
+
+        return $categories->paginate();
     }
 
     /**

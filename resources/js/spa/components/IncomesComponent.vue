@@ -18,6 +18,15 @@
 
                             <v-spacer></v-spacer>
 
+                            <income-form-component
+                                :dialog="dialog"
+                                :editedItem="editedItem"
+                                :title="dialogTitle"
+                                :new-btn="'New Income'"
+                                @new-dialog="newItem"
+                                @save-dialog="save($event)"
+                                @close-dialog="close"></income-form-component>
+
                         </v-toolbar>
 
                         <search-component v-model="searchTerm"
@@ -62,6 +71,7 @@
 </template>
 
 <script>
+import IncomeFormComponent from "./IncomeFormComponent";
 import ConfirmDialogComponent from "./ConfirmDialogComponent";
 import SearchComponent from "./SearchComponent";
 import table from "../mixins/table";
@@ -69,6 +79,7 @@ import table from "../mixins/table";
 export default {
     mixins: [table],
     components: {
+        IncomeFormComponent,
         SearchComponent,
         ConfirmDialogComponent
     },

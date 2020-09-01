@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class IncomeController extends Controller
 {
     /**
@@ -19,5 +21,18 @@ class IncomeController extends Controller
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(20);
+    }
+
+    /**
+     * Store Income
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function store(Request $request)
+    {
+        return auth()->user()
+            ->incomes()
+            ->create($request->only(['category_id', 'date', 'description', 'amount']));
     }
 }
