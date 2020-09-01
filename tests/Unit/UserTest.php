@@ -37,4 +37,10 @@ class UserTest extends TestCase
     {
         $this->assertInstanceOf(Collection::class, $this->user->expenses);
     }
+
+    /** @test */
+    public function a_user_has_incomes()
+    {
+        $this->assertInstanceOf(Collection::class, $this->user->incomes);
+    }
 }

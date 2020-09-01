@@ -34,6 +34,14 @@
                         <v-list-item-title>{{ $t('Income Categories') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link :to="{ name: 'incomes'}" style="text-decoration: none;">
+                    <v-list-item-action>
+                        <v-icon>mdi-cash</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $t('Incomes') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
 
             <template v-slot:append>

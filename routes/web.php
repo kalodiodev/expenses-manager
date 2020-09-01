@@ -34,4 +34,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/expenses', 'ExpenseController@store');
     Route::patch('/expenses/{expense}', 'ExpenseController@update')->name('expense');
     Route::delete('/expenses/{expense}', 'ExpenseController@destroy');
+
+    Route::get('/incomes', 'IncomeController@index')->name('incomes');
 });

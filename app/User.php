@@ -66,4 +66,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Expense::class);
     }
+
+    /**
+     * A user has many incomes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function incomes()
+    {
+        return $this->hasMany(Income::class);
+    }
 }
