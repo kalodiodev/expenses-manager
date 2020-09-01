@@ -37,4 +37,5 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/incomes', 'IncomeController@index')->name('incomes');
     Route::post('/incomes', 'IncomeController@store');
+    Route::delete('/incomes/{income}', 'IncomeController@destroy')->name('income');
 });

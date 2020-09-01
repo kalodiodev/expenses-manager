@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Income;
 use App\Http\Requests\IncomeRequest;
 
 class IncomeController extends Controller
@@ -34,5 +35,23 @@ class IncomeController extends Controller
         return auth()->user()
             ->incomes()
             ->create($request->only(['category_id', 'date', 'description', 'amount']));
+    }
+
+    /**
+     * Delete Income
+     *
+     * @param Income $income
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(Income $income)
+    {
+        if ($income->user->id != auth()->user()->id) {
+            abort(404, 'Income not found.');
+        }
+
+        $income->delete();
+
+        return response()->noContent();
     }
 }
