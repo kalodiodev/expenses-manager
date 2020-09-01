@@ -29,7 +29,7 @@ class ExpenseTest extends TestCase
     }
 
     /** @test */
-    public function it_finds_categories_that_contain_given_term()
+    public function it_finds_expenses_that_contain_given_term()
     {
         factory(Expense::class)->create(['description' => 'Test1']);
         factory(Expense::class)->create(['description' => 'Test2']);

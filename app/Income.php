@@ -25,4 +25,16 @@ class Income extends Model
     {
         return $this->belongsTo(IncomeCategory::class, 'category_id', 'id');
     }
+
+    /**
+     * Search incomes
+     *
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('description', 'LIKE', '%' . $term . '%');
+    }
 }

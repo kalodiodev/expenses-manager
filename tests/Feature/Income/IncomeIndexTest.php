@@ -38,4 +38,23 @@ class IncomeIndexTest extends IntegrationTestCase
         $this->getJson(route('incomes'))
             ->assertUnauthorized();
     }
+
+    /** @test */
+    public function a_user_can_search_incomes()
+    {
+        $user = $this->signIn();
+
+        factory(Income::class)->create([
+            'user_id' => $user->id,
+            'description' => 'Test'
+        ]);
+
+        factory(Income::class)->create([
+            'user_id' => $user->id,
+            'description' => 'Other'
+        ]);
+
+        $this->getJson(route('incomes', ['search' => 'Test']))
+            ->assertJsonCount(1, 'data');
+    }
 }

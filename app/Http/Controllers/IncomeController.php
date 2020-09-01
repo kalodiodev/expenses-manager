@@ -11,8 +11,11 @@ class IncomeController extends Controller
      */
     public function index()
     {
+        $search = \request()->get('search') ?: '';
+
         return auth()->user()
             ->incomes()
+            ->search($search)
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(20);
