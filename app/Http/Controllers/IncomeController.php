@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\IncomeRequest;
 
 class IncomeController extends Controller
 {
@@ -26,10 +26,10 @@ class IncomeController extends Controller
     /**
      * Store Income
      *
-     * @param Request $request
+     * @param IncomeRequest $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(IncomeRequest $request)
     {
         return auth()->user()
             ->incomes()
