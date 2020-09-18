@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeCategoryController;
+use App\Http\Controllers\IncomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,24 +22,24 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/expense-categories', 'ExpenseCategoryController@index')->name('expense.categories');
-    Route::post('/expense-categories', 'ExpenseCategoryController@store');
-    Route::patch('/expense-categories/{category}', 'ExpenseCategoryController@update')->name('expense.category');
-    Route::delete('/expense-categories/{category}', 'ExpenseCategoryController@destroy');
-    Route::post('/expense-categories/exists', 'ExpenseCategoryController@exists')->name('expense.category.exists');
+    Route::get('/expense-categories', [ExpenseCategoryController::class, 'index'])->name('expense.categories');
+    Route::post('/expense-categories', [ExpenseCategoryController::class, 'store']);
+    Route::patch('/expense-categories/{category}', [ExpenseCategoryController::class, 'update'])->name('expense.category');
+    Route::delete('/expense-categories/{category}', [ExpenseCategoryController::class, 'destroy']);
+    Route::post('/expense-categories/exists', [ExpenseCategoryController::class, 'exists'])->name('expense.category.exists');
 
-    Route::get('/income-categories', 'IncomeCategoryController@index')->name('income.categories');
-    Route::post('/income-categories', 'IncomeCategoryController@store');
-    Route::patch('/income-categories/{category}', 'IncomeCategoryController@update')->name('income.category');
-    Route::delete('/income-categories/{category}', 'IncomeCategoryController@destroy');
-    Route::post('/income-categories/exists', 'IncomeCategoryController@exists')->name('income.category.exists');
+    Route::get('/income-categories', [IncomeCategoryController::class, 'index'])->name('income.categories');
+    Route::post('/income-categories', [IncomeCategoryController::class, 'store']);
+    Route::patch('/income-categories/{category}', [IncomeCategoryController::class, 'update'])->name('income.category');
+    Route::delete('/income-categories/{category}', [IncomeCategoryController::class, 'destroy']);
+    Route::post('/income-categories/exists', [IncomeCategoryController::class, 'exists'])->name('income.category.exists');
 
-    Route::get('/expenses', 'ExpenseController@index')->name('expenses');
-    Route::post('/expenses', 'ExpenseController@store');
-    Route::patch('/expenses/{expense}', 'ExpenseController@update')->name('expense');
-    Route::delete('/expenses/{expense}', 'ExpenseController@destroy');
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses');
+    Route::post('/expenses', [ExpenseController::class, 'store']);
+    Route::patch('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expense');
+    Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy']);
 
-    Route::get('/incomes', 'IncomeController@index')->name('incomes');
-    Route::post('/incomes', 'IncomeController@store');
-    Route::delete('/incomes/{income}', 'IncomeController@destroy')->name('income');
+    Route::get('/incomes', [IncomeController::class, 'index'])->name('incomes');
+    Route::post('/incomes', [IncomeController::class, 'store']);
+    Route::delete('/incomes/{income}', [IncomeController::class, 'destroy'])->name('income');
 });
