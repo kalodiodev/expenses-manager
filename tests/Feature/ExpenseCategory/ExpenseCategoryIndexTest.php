@@ -13,7 +13,7 @@ class ExpenseCategoryIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(ExpenseCategory::class)->create(['user_id' => $user->id]);
+        ExpenseCategory::factory()->create(['user_id' => $user->id]);
 
         $this->get(route('expense.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
             ->assertJsonCount(1, 'data');
@@ -24,8 +24,8 @@ class ExpenseCategoryIndexTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        factory(ExpenseCategory::class)->create([
-            'user_id' => factory(User::class)->create()->id
+        ExpenseCategory::factory()->create([
+            'user_id' => User::factory()->create()
         ]);
 
         $this->get(route('expense.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
@@ -37,12 +37,12 @@ class ExpenseCategoryIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(ExpenseCategory::class)->create([
+        ExpenseCategory::factory()->create([
             'user_id' => $user->id,
             'name' => 'Test'
         ]);
 
-        factory(ExpenseCategory::class)->create([
+        ExpenseCategory::factory()->create([
             'user_id' => $user->id,
             'name' => 'Other'
         ]);

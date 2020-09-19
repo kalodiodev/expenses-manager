@@ -13,7 +13,7 @@ class IncomeCategoryExistsTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        $category = factory(IncomeCategory::class)->create(['user_id' => $user->id]);
+        $category = IncomeCategory::factory()->create(['user_id' => $user->id]);
 
         $this->postJson(route('income.category.exists'), ['name' => $category->name])
             ->assertJson(['exists' => true]);
@@ -24,8 +24,8 @@ class IncomeCategoryExistsTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $category = factory(IncomeCategory::class)->create([
-            'user_id' => factory(User::class)->create()->id
+        $category = IncomeCategory::factory()->create([
+            'user_id' => User::factory()->create()
         ]);
 
         $this->postJson(route('income.category.exists'), ['name' => $category->name])

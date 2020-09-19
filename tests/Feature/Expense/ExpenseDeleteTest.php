@@ -13,7 +13,7 @@ class ExpenseDeleteTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->expense = factory(Expense::class)->create();
+        $this->expense = Expense::factory()->create();
     }
 
     /** @test */
@@ -21,7 +21,7 @@ class ExpenseDeleteTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        $expense = factory(Expense::class)->create(['user_id' => $user->id]);
+        $expense = Expense::factory()->create(['user_id' => $user->id]);
 
         $this->deleteJson(route('expense', ['expense' => $expense]))
             ->assertNoContent();

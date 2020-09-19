@@ -16,8 +16,8 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
-        $this->category = factory(ExpenseCategory::class)->create(['user_id' => $this->user->id]);
+        $this->user = User::factory()->create();
+        $this->category = ExpenseCategory::factory()->create(['user_id' => $this->user->id]);
     }
 
     /** @test */
@@ -68,7 +68,7 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
     {
         $this->signIn($this->user);
 
-        factory(ExpenseCategory::class)->create(['name' => 'test']);
+        ExpenseCategory::factory()->create(['name' => 'test']);
 
         $this->patchCategory($this->categoryRaw(['name' => $this->category->name]))
             ->assertJsonMissingValidationErrors();
@@ -96,6 +96,6 @@ class ExpenseCategoryUpdateTest extends IntegrationTestCase
      */
     protected function categoryRaw($overrides = [])
     {
-        return factory(ExpenseCategory::class)->raw($overrides);
+        return ExpenseCategory::factory()->raw($overrides);
     }
 }

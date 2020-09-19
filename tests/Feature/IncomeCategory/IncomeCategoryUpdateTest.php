@@ -16,8 +16,8 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
-        $this->category = factory(IncomeCategory::class)->create(['user_id' => $this->user]);
+        $this->user = User::factory()->create();
+        $this->category = IncomeCategory::factory()->create(['user_id' => $this->user]);
     }
 
     /** @test */
@@ -25,7 +25,7 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     {
         $this->signIn($this->user);
 
-        $this->patchJson(route('income.category', ['category' => $this->category]), factory(IncomeCategory::class)->raw())
+        $this->patchJson(route('income.category', ['category' => $this->category]), IncomeCategory::factory()->raw())
             ->assertOk();
     }
 
@@ -34,14 +34,14 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('income.category', ['category' => $this->category]), factory(IncomeCategory::class)->raw())
+        $this->patchJson(route('income.category', ['category' => $this->category]), IncomeCategory::factory()->raw())
             ->assertNotFound();
     }
 
     /** @test */
     public function a_guest_cannot_patch_an_income_categories()
     {
-        $this->patchJson(route('income.category', ['category' => $this->category]), factory(IncomeCategory::class)->raw())
+        $this->patchJson(route('income.category', ['category' => $this->category]), IncomeCategory::factory()->raw())
             ->assertUnauthorized();
     }
 
@@ -68,7 +68,7 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
     {
         $this->signIn($this->user);
 
-        factory(IncomeCategory::class)->create(['name' => 'test']);
+        IncomeCategory::factory()->create(['name' => 'test']);
 
         $this->patchCategory($this->categoryRaw(['name' => $this->category->name]))
             ->assertJsonMissingValidationErrors();
@@ -96,6 +96,6 @@ class IncomeCategoryUpdateTest extends IntegrationTestCase
      */
     protected function categoryRaw($overrides = [])
     {
-        return factory(IncomeCategory::class)->raw($overrides);
+        return IncomeCategory::factory()->raw($overrides);
     }
 }

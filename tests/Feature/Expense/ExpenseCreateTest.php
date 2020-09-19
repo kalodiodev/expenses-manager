@@ -13,14 +13,14 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw())
+        $this->postJson(route('expenses'), Expense::factory()->raw())
             ->assertCreated();
     }
 
     /** @test */
     public function a_guest_cannot_post_an_expense()
     {
-        $this->postJson(route('expenses'), factory(Expense::class)->raw())
+        $this->postJson(route('expenses'), Expense::factory()->raw())
             ->assertUnauthorized();
     }
 
@@ -29,7 +29,7 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['category_id' => '']))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['category_id' => '']))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -38,7 +38,7 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['category_id' => 100]))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['category_id' => 100]))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -47,10 +47,10 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['date' => '']))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['date' => '']))
             ->assertJsonValidationErrors('date');
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['date' => 'string']))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['date' => 'string']))
             ->assertJsonValidationErrors('date');
     }
 
@@ -59,13 +59,13 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['cost' => '']))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['cost' => '']))
             ->assertJsonValidationErrors('cost');
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['cost' => 'string']))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['cost' => 'string']))
             ->assertJsonValidationErrors('cost');
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['cost' => -10]))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['cost' => -10]))
             ->assertJsonValidationErrors('cost');
     }
 
@@ -74,7 +74,7 @@ class ExpenseCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expenses'), factory(Expense::class)->raw(['description' => Str::random(191)]))
+        $this->postJson(route('expenses'), Expense::factory()->raw(['description' => Str::random(191)]))
             ->assertJsonValidationErrors('description');
     }
 }

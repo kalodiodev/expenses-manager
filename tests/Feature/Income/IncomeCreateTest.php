@@ -13,14 +13,14 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw())
+        $this->postJson(route('incomes'), Income::factory()->raw())
             ->assertCreated();
     }
 
     /** @test */
     public function a_guest_cannot_post_an_income()
     {
-        $this->postJson(route('incomes'), factory(Income::class)->raw())
+        $this->postJson(route('incomes'), Income::factory()->raw())
             ->assertUnauthorized();
     }
 
@@ -29,7 +29,7 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['category_id' => '']))
+        $this->postJson(route('incomes'), Income::factory()->raw(['category_id' => '']))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -38,7 +38,7 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['category_id' => 100]))
+        $this->postJson(route('incomes'), Income::factory()->raw(['category_id' => 100]))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -47,10 +47,10 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['date' => '']))
+        $this->postJson(route('incomes'), Income::factory()->raw(['date' => '']))
             ->assertJsonValidationErrors('date');
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['date' => 'string']))
+        $this->postJson(route('incomes'), Income::factory()->raw(['date' => 'string']))
             ->assertJsonValidationErrors('date');
     }
 
@@ -59,13 +59,13 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['amount' => '']))
+        $this->postJson(route('incomes'), Income::factory()->raw(['amount' => '']))
             ->assertJsonValidationErrors('amount');
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['amount' => 'string']))
+        $this->postJson(route('incomes'), Income::factory()->raw(['amount' => 'string']))
             ->assertJsonValidationErrors('amount');
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['amount' => -10]))
+        $this->postJson(route('incomes'), Income::factory()->raw(['amount' => -10]))
             ->assertJsonValidationErrors('amount');
     }
 
@@ -74,7 +74,7 @@ class IncomeCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('incomes'), factory(Income::class)->raw(['description' => Str::random(191)]))
+        $this->postJson(route('incomes'), Income::factory()->raw(['description' => Str::random(191)]))
             ->assertJsonValidationErrors('description');
     }
 }

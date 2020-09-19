@@ -15,7 +15,7 @@ class ExpenseTest extends TestCase
     /** @test */
     public function an_expense_belongs_to_a_user()
     {
-        $expense = factory(Expense::class)->create();
+        $expense = Expense::factory()->create();
 
         $this->assertInstanceOf(User::class, $expense->user);
     }
@@ -23,7 +23,7 @@ class ExpenseTest extends TestCase
     /** @test */
     public function an_expense_belongs_to_a_category()
     {
-        $expense = factory(Expense::class)->create();
+        $expense = Expense::factory()->create();
 
         $this->assertInstanceOf(ExpenseCategory::class, $expense->category);
     }
@@ -31,8 +31,8 @@ class ExpenseTest extends TestCase
     /** @test */
     public function it_finds_expenses_that_contain_given_term()
     {
-        factory(Expense::class)->create(['description' => 'Test1']);
-        factory(Expense::class)->create(['description' => 'Test2']);
+        Expense::factory()->create(['description' => 'Test1']);
+        Expense::factory()->create(['description' => 'Test2']);
 
         $expenses = Expense::search('Test1');
 

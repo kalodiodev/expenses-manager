@@ -14,7 +14,7 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->expense = factory(Expense::class)->create();
+        $this->expense = Expense::factory()->create();
     }
 
     /** @test */
@@ -22,9 +22,9 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        $expense = factory(Expense::class)->create(['user_id' => $user->id]);
+        $expense = Expense::factory()->create(['user_id' => $user->id]);
 
-        $this->patchJson(route('expense', ['expense' => $expense->id]), $new = factory(Expense::class)->raw())
+        $this->patchJson(route('expense', ['expense' => $expense->id]), $new = Expense::factory()->raw())
             ->assertOk();
 
         $this->assertEquals($new['description'], $expense->fresh()->description);
@@ -36,14 +36,14 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), $new = factory(Expense::class)->raw())
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), $new = Expense::factory()->raw())
             ->assertNotFound();
     }
 
     /** @test */
     public function a_guest_cannot_patch_an_expense()
     {
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), $new = factory(Expense::class)->raw())
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), $new =  Expense::factory()->raw())
             ->assertUnauthorized();
     }
 
@@ -52,7 +52,7 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['category_id' => '']))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]),  Expense::factory()->raw(['category_id' => '']))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -61,7 +61,7 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['category_id' => 100]))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['category_id' => 100]))
             ->assertJsonValidationErrors('category_id');
     }
 
@@ -70,10 +70,10 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['date' => '']))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['date' => '']))
             ->assertJsonValidationErrors('date');
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['date' => 'string']))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['date' => 'string']))
             ->assertJsonValidationErrors('date');
     }
 
@@ -82,13 +82,13 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['cost' => '']))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['cost' => '']))
             ->assertJsonValidationErrors('cost');
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['cost' => 'string']))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['cost' => 'string']))
             ->assertJsonValidationErrors('cost');
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['cost' => -10]))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['cost' => -10]))
             ->assertJsonValidationErrors('cost');
     }
 
@@ -97,7 +97,7 @@ class ExpenseUpdateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->patchJson(route('expense', ['expense' => $this->expense->id]), factory(Expense::class)->raw(['description' => Str::random(191)]))
+        $this->patchJson(route('expense', ['expense' => $this->expense->id]), Expense::factory()->raw(['description' => Str::random(191)]))
             ->assertJsonValidationErrors('description');
     }
 }

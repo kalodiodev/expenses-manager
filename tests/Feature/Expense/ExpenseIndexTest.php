@@ -13,7 +13,7 @@ class ExpenseIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(Expense::class)->create(['user_id' => $user->id]);
+        Expense::factory()->create(['user_id' => $user->id]);
 
         $this->getJson(route('expenses'))
             ->assertJsonCount(1, 'data');
@@ -24,8 +24,8 @@ class ExpenseIndexTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        factory(Expense::class)->create([
-            'user_id' => factory(User::class)->create()->id
+        Expense::factory()->create([
+            'user_id' => User::factory()->create()
         ]);
 
         $this->getJson(route('expenses'))
@@ -44,12 +44,12 @@ class ExpenseIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(Expense::class)->create([
+        Expense::factory()->create([
             'user_id' => $user->id,
             'description' => 'Test'
         ]);
 
-        factory(Expense::class)->create([
+        Expense::factory()->create([
             'user_id' => $user->id,
             'description' => 'Other'
         ]);

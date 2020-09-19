@@ -15,7 +15,7 @@ class IncomeCategoryTest extends TestCase
     /** @test */
     public function an_income_category_belongs_to_a_user()
     {
-        $category = factory(IncomeCategory::class)->create();
+        $category = IncomeCategory::factory()->create();
 
         $this->assertInstanceOf(User::class, $category->user);
     }
@@ -23,7 +23,7 @@ class IncomeCategoryTest extends TestCase
     /** @test */
     public function an_income_category_has_incomes()
     {
-        $category = factory(IncomeCategory::class)->create();
+        $category = IncomeCategory::factory()->create();
 
         $this->assertInstanceOf(Collection::class, $category->incomes);
     }
@@ -31,8 +31,8 @@ class IncomeCategoryTest extends TestCase
     /** @test */
     public function it_finds_categories_that_contain_given_term()
     {
-        factory(IncomeCategory::class)->create(['name' => 'Test1']);
-        factory(IncomeCategory::class)->create(['name' => 'Test2']);
+        IncomeCategory::factory()->create(['name' => 'Test1']);
+        IncomeCategory::factory()->create(['name' => 'Test2']);
 
         $categories = IncomeCategory::search('Test1');
 

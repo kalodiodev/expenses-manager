@@ -13,7 +13,7 @@ class IncomeDeleteTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->income = factory(Income::class)->create();
+        $this->income = Income::factory()->create();
     }
 
     /** @test */
@@ -21,7 +21,7 @@ class IncomeDeleteTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        $income = factory(Income::class)->create(['user_id' => $user->id]);
+        $income = Income::factory()->create(['user_id' => $user->id]);
 
         $this->deleteJson(route('income', ['income' => $income]))
             ->assertNoContent();

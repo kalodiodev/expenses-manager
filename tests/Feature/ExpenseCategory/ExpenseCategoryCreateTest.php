@@ -13,14 +13,14 @@ class ExpenseCategoryCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw())
+        $this->postJson(route('expense.categories'), ExpenseCategory::factory()->raw())
             ->assertCreated();
     }
 
     /** @test */
     public function a_guest_cannot_post_an_expense_categories()
     {
-        $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw())
+        $this->postJson(route('expense.categories'), ExpenseCategory::factory()->raw())
             ->assertUnauthorized();
     }
 
@@ -29,7 +29,7 @@ class ExpenseCategoryCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw(['name' => '']))
+        $this->postJson(route('expense.categories'), ExpenseCategory::factory()->raw(['name' => '']))
             ->assertJsonValidationErrors('name');
     }
 
@@ -38,7 +38,7 @@ class ExpenseCategoryCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw(['name' => Str::random(191)]))
+        $this->postJson(route('expense.categories'), ExpenseCategory::factory()->raw(['name' => Str::random(191)]))
             ->assertJsonValidationErrors('name');
     }
 
@@ -47,9 +47,9 @@ class ExpenseCategoryCreateTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        factory(ExpenseCategory::class)->create(['name' => 'test']);
+        ExpenseCategory::factory()->create(['name' => 'test']);
 
-        $this->postJson(route('expense.categories'), factory(ExpenseCategory::class)->raw(['name' => 'test']))
+        $this->postJson(route('expense.categories'), ExpenseCategory::factory()->raw(['name' => 'test']))
             ->assertJsonValidationErrors('name');
     }
 }

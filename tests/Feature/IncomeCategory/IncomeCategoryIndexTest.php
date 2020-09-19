@@ -13,7 +13,7 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(IncomeCategory::class)->create(['user_id' => $user->id]);
+        IncomeCategory::factory()->create(['user_id' => $user->id]);
 
         $this->get(route('income.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
             ->assertJsonCount(1, 'data');
@@ -24,8 +24,8 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        factory(IncomeCategory::class)->create([
-            'user_id' => factory(User::class)->create()->id
+        IncomeCategory::factory()->create([
+            'user_id' => User::factory()->create()
         ]);
 
         $this->get(route('income.categories'), ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
@@ -37,12 +37,12 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(IncomeCategory::class)->create([
+        IncomeCategory::factory()->create([
             'user_id' => $user->id,
             'name' => 'Test'
         ]);
 
-        factory(IncomeCategory::class)->create([
+        IncomeCategory::factory()->create([
             'user_id' => $user->id,
             'name' => 'Other'
         ]);
@@ -56,9 +56,9 @@ class IncomeCategoryIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(IncomeCategory::class, 50)->create(['user_id' => $user->id]);
+        IncomeCategory::factory()->count(50)->create(['user_id' => $user->id]);
 
-        $response = $this->getJson(route('income.categories', ['nopagination']))
+        $this->getJson(route('income.categories', ['nopagination']))
             ->assertJsonCount(50);
     }
 }

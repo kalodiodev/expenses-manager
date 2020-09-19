@@ -13,7 +13,7 @@ class IncomeIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(Income::class)->create(['user_id' => $user->id]);
+        Income::factory()->create(['user_id' => $user->id]);
 
         $this->getJson(route('incomes'))
             ->assertJsonCount(1, 'data');
@@ -24,8 +24,8 @@ class IncomeIndexTest extends IntegrationTestCase
     {
         $this->signIn();
 
-        factory(Income::class)->create([
-            'user_id' => factory(User::class)->create()->id
+        Income::factory()->create([
+            'user_id' => User::factory()->create()
         ]);
 
         $this->getJson(route('incomes'))
@@ -44,12 +44,12 @@ class IncomeIndexTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        factory(Income::class)->create([
+        Income::factory()->create([
             'user_id' => $user->id,
             'description' => 'Test'
         ]);
 
-        factory(Income::class)->create([
+        Income::factory()->create([
             'user_id' => $user->id,
             'description' => 'Other'
         ]);

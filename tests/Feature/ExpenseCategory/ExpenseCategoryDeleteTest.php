@@ -13,7 +13,7 @@ class ExpenseCategoryDeleteTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->category = factory(ExpenseCategory::class)->create();
+        $this->category = ExpenseCategory::factory()->create();
     }
 
     /** @test */
@@ -21,7 +21,7 @@ class ExpenseCategoryDeleteTest extends IntegrationTestCase
     {
         $user = $this->signIn();
 
-        $category = factory(ExpenseCategory::class)->create(['user_id' => $user->id]);
+        $category = ExpenseCategory::factory()->create(['user_id' => $user->id]);
 
         $this->deleteJson(route('expense.category', ['category' => $category]))
             ->assertNoContent();
