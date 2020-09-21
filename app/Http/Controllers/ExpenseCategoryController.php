@@ -20,6 +20,10 @@ class ExpenseCategoryController extends Controller
 
         $categories = auth()->user()->expenseCategories()->search($search);
 
+        if (\request()->has('with_entries')) {
+            $categories->whereHas('expenses');
+        }
+
         if (\request()->has('nopagination')) {
             return $categories->get();
         }

@@ -28,9 +28,23 @@
                                 @close-dialog="close"></expense-form-component>
                         </v-toolbar>
 
-                        <search-component v-model="searchTerm"
-                                          @search="search"
-                                          @cleared="clearSearch"></search-component>
+                        <v-row class="flex-row justify-space-between">
+                            <v-col cols="12" sm="6" md="3">
+                                <v-col class="d-flex" cols="12" sm="6">
+                                    <v-select item-text="name"
+                                              item-value="id"
+                                              :items="categories"
+                                              v-model="categoryId"
+                                              :label='"Category"'
+                                              clearable
+                                              @change="fetchEntries(1)"></v-select>
+                                </v-col>
+                            </v-col>
+
+                            <search-component v-model="searchTerm"
+                                              @search="search"
+                                              @cleared="clearSearch"></search-component>
+                        </v-row>
                     </template>
 
                     <template v-slot:item.actions="{ item }">
@@ -82,6 +96,9 @@
             SearchComponent,
             ConfirmDialogComponent
         },
+        mounted() {
+            this.fetchCategories()
+        },
         data() {
             return {
                 baseUrl: '/expenses',
@@ -99,10 +116,30 @@
                 ],
                 newItemDialogTitle: 'New Expense',
                 deleteItemDialogTitle: 'Delete Expense',
-                deleteItemConfirmMessage: 'Are you sure you want to delete this expense?'
+                deleteItemConfirmMessage: 'Are you sure you want to delete this expense?',
+
+                categories: [],
+                categoryId: null
             }
         },
         methods: {
+            entriesUrl: function (page) {
+                let url = this.baseUrl + '?page=' + page + "&";
+
+                if (this.categoryId) {
+                    url += "category=" + this.categoryId + "&";
+                }
+
+                url += "search=" + (this.searchTerm ? this.searchTerm : '');
+
+                return url;
+            },
+            fetchCategories: function () {
+                axios.get('/expense-categories?nopagination=1')
+                    .then(res => {
+                        this.categories = res.data;
+                    });
+            },
             postData: function (item) {
                 return {
                     'date': item.date,

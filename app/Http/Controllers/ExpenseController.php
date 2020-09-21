@@ -16,8 +16,13 @@ class ExpenseController extends Controller
     {
         $search = \request()->get('search') ?: '';
 
-        return auth()->user()
-            ->expenses()
+        $expenses = auth()->user()->expenses();
+
+        if (request()->has('category')) {
+            $expenses->where('category_id', request()->get('category'));
+        }
+
+        return $expenses
             ->search($search)
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')

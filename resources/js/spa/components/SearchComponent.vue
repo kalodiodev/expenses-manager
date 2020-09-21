@@ -1,19 +1,15 @@
 <template>
-    <v-container>
-        <v-row class="flex-row-reverse">
-            <v-col cols="12" sm="6" md="3">
-                <v-text-field
-                    :value="value"
-                    @input="input"
-                    @keypress.enter="search"
-                    @blur="search"
-                    @click:clear="clear"
-                    :label='$t("Search")'
-                    clearable
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-col cols="12" sm="6" md="3" class="align-self-center">
+        <v-text-field
+            :value="value"
+            @input="input"
+            @keypress.enter="search"
+            @blur="search"
+            @click:clear="clear"
+            :label='$t("Search")'
+            clearable
+        ></v-text-field>
+    </v-col>
 </template>
 
 <script>

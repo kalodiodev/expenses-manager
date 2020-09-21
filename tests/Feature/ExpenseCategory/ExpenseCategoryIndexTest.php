@@ -50,4 +50,20 @@ class ExpenseCategoryIndexTest extends IntegrationTestCase
         $this->getJson(route('expense.categories', ['search' => 'Test']))
             ->assertJsonCount(1, 'data');
     }
+
+    /** @test */
+    public function index_expense_categories_that_have_expenses()
+    {
+        $user = $this->signIn();
+
+        ExpenseCategory::factory()
+            ->create(['user_id' => $user->id]);
+
+        ExpenseCategory::factory()
+            ->hasExpenses(2, ['user_id' => $user->id])
+            ->create(['user_id' => $user->id]);
+
+        $this->getJson(route('expense.categories', ['with_entries' => true]))
+            ->assertJsonCount(1, 'data');
+    }
 }

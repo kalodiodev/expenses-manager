@@ -29,9 +29,13 @@
                                 @close-dialog="close"></category-form-component>
                         </v-toolbar>
 
-                        <search-component v-model="searchTerm"
-                                          @search="search"
-                                          @cleared="clearSearch"></search-component>
+                        <v-container>
+                            <v-row class="flex-row-reverse">
+                                <search-component v-model="searchTerm"
+                                                  @search="search"
+                                                  @cleared="clearSearch"></search-component>
+                            </v-row>
+                        </v-container>
                     </template>
 
                     <template v-slot:item.actions="{ item }">
