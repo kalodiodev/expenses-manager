@@ -2191,11 +2191,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       headers: [{
-        text: 'ID',
-        align: 'start',
-        sortable: true,
-        value: 'id'
-      }, {
         text: 'Name',
         value: 'name'
       }, {

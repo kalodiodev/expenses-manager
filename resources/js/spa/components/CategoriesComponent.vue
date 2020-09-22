@@ -96,12 +96,6 @@ export default {
     data() {
         return {
             headers: [
-                {
-                    text: 'ID',
-                    align: 'start',
-                    sortable: true,
-                    value: 'id',
-                },
                 {text: 'Name', value: 'name'},
                 {text: 'Description', value: 'description'},
                 {text: 'Actions', value: 'actions', sortable: false},
