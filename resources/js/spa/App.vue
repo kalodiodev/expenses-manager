@@ -46,6 +46,13 @@
 
             <template v-slot:append>
                 <LanguageSwitchComponent></LanguageSwitchComponent>
+
+                <div class="pa-2">
+                    <form id="logout" action="/logout" method="post">
+                        <input hidden name="_token" :value="csrf">
+                    </form>
+                    <v-btn block @click="logout">{{ $t('Logout') }}</v-btn>
+                </div>
             </template>
         </v-navigation-drawer>
 
@@ -73,6 +80,7 @@ export default {
     data() {
         return {
             drawer: true,
+            csrf: '',
         }
     },
     created() {
@@ -83,6 +91,14 @@ export default {
         } else if (navigator.language) {
             this.$i18n.locale = navigator.language.substring(0, 2);
         }
+    },
+    mounted() {
+        this.csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    },
+    methods: {
+        logout: function () {
+            document.getElementById("logout").submit();
+        },
     }
 }
 </script>

@@ -2059,6 +2059,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2066,7 +2073,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      drawer: true
+      drawer: true,
+      csrf: ''
     };
   },
   created: function created() {
@@ -2076,6 +2084,14 @@ __webpack_require__.r(__webpack_exports__);
       this.$i18n.locale = locale;
     } else if (navigator.language) {
       this.$i18n.locale = navigator.language.substring(0, 2);
+    }
+  },
+  mounted: function mounted() {
+    this.csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  },
+  methods: {
+    logout: function logout() {
+      document.getElementById("logout").submit();
     }
   }
 });
@@ -6638,7 +6654,39 @@ var render = function() {
             {
               key: "append",
               fn: function() {
-                return [_c("LanguageSwitchComponent")]
+                return [
+                  _c("LanguageSwitchComponent"),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "pa-2" },
+                    [
+                      _c(
+                        "form",
+                        {
+                          attrs: {
+                            id: "logout",
+                            action: "/logout",
+                            method: "post"
+                          }
+                        },
+                        [
+                          _c("input", {
+                            attrs: { hidden: "", name: "_token" },
+                            domProps: { value: _vm.csrf }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { block: "" }, on: { click: _vm.logout } },
+                        [_vm._v(_vm._s(_vm.$t("Logout")))]
+                      )
+                    ],
+                    1
+                  )
+                ]
               },
               proxy: true
             }
