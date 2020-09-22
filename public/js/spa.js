@@ -3136,6 +3136,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3171,10 +3185,32 @@ __webpack_require__.r(__webpack_exports__);
       }],
       newItemDialogTitle: 'New Income',
       deleteItemDialogTitle: 'Delete Income',
-      deleteItemConfirmMessage: 'Are you sure you want to delete this income?'
+      deleteItemConfirmMessage: 'Are you sure you want to delete this income?',
+      categories: [],
+      categoryId: null
     };
   },
+  mounted: function mounted() {
+    this.fetchCategories();
+  },
   methods: {
+    entriesUrl: function entriesUrl(page) {
+      var url = this.baseUrl + '?page=' + page + "&";
+
+      if (this.categoryId) {
+        url += "category=" + this.categoryId + "&";
+      }
+
+      url += "search=" + (this.searchTerm ? this.searchTerm : '');
+      return url;
+    },
+    fetchCategories: function fetchCategories() {
+      var _this = this;
+
+      axios.get('/income-categories?nopagination=1').then(function (res) {
+        _this.categories = res.data;
+      });
+    },
     postData: function postData(item) {
       return {
         'date': item.date,
@@ -8102,16 +8138,65 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c("search-component", {
-                          on: { search: _vm.search, cleared: _vm.clearSearch },
-                          model: {
-                            value: _vm.searchTerm,
-                            callback: function($$v) {
-                              _vm.searchTerm = $$v
-                            },
-                            expression: "searchTerm"
-                          }
-                        })
+                        _c(
+                          "v-row",
+                          { staticClass: "flex-row justify-space-between" },
+                          [
+                            _c(
+                              "v-col",
+                              { attrs: { cols: "12", sm: "6", md: "3" } },
+                              [
+                                _c(
+                                  "v-col",
+                                  {
+                                    staticClass: "d-flex",
+                                    attrs: { cols: "12", sm: "6" }
+                                  },
+                                  [
+                                    _c("v-select", {
+                                      attrs: {
+                                        "item-text": "name",
+                                        "item-value": "id",
+                                        items: _vm.categories,
+                                        label: "Category",
+                                        clearable: ""
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          return _vm.fetchEntries(1)
+                                        }
+                                      },
+                                      model: {
+                                        value: _vm.categoryId,
+                                        callback: function($$v) {
+                                          _vm.categoryId = $$v
+                                        },
+                                        expression: "categoryId"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("search-component", {
+                              on: {
+                                search: _vm.search,
+                                cleared: _vm.clearSearch
+                              },
+                              model: {
+                                value: _vm.searchTerm,
+                                callback: function($$v) {
+                                  _vm.searchTerm = $$v
+                                },
+                                expression: "searchTerm"
+                              }
+                            })
+                          ],
+                          1
+                        )
                       ]
                     },
                     proxy: true

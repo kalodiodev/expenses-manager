@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Income;
 
+use App\IncomeCategory;
 use App\User;
 use App\Income;
 use Tests\IntegrationTestCase;
@@ -56,5 +57,22 @@ class IncomeIndexTest extends IntegrationTestCase
 
         $this->getJson(route('incomes', ['search' => 'Test']))
             ->assertJsonCount(1, 'data');
+    }
+
+    /** @test */
+    public function a_user_can_filter_incomes_by_category()
+    {
+        $user = $this->signIn();
+
+        $salary = IncomeCategory::factory()
+            ->hasIncomes(2, ['user_id' => $user->id])
+            ->create(['user_id' => $user->id]);
+
+        IncomeCategory::factory()
+            ->hasIncomes(3, ['user_id' => $user->id])
+            ->create(['user_id' => $user->id]);
+
+        $this->getJson(route('incomes', ['category' => $salary->id, 'nopagination' => 1]))
+            ->assertJsonCount(2, 'data');
     }
 }

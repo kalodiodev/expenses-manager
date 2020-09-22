@@ -16,8 +16,13 @@ class IncomeController extends Controller
     {
         $search = \request()->get('search') ?: '';
 
-        return auth()->user()
-            ->incomes()
+        $incomes = auth()->user()->incomes();
+
+        if (request()->has('category')) {
+            $incomes->where('category_id', request()->get('category'));
+        }
+
+        return $incomes
             ->search($search)
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc')
