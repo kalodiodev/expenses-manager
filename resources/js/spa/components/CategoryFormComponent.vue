@@ -19,6 +19,16 @@
                                 label="Category Name"></v-text-field>
                         </v-col>
                         <v-col>
+                            <v-color-picker
+                                dot-size="25"
+                                hide-inputs
+                                hide-mode-switch
+                                mode="hex"
+                                swatches-max-height="200"
+                                v-model="editedItem.color"
+                            ></v-color-picker>
+                        </v-col>
+                        <v-col>
                             <v-textarea
                                 v-model="editedItem.description"
                                 @blur="validateDescription"

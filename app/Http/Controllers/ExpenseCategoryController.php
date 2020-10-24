@@ -43,7 +43,7 @@ class ExpenseCategoryController extends Controller
 
         return auth()->user()
             ->expenseCategories()
-            ->create($request->only(['name', 'description']));
+            ->create($request->only(['name', 'description', 'color']));
     }
 
     /**
@@ -86,7 +86,7 @@ class ExpenseCategoryController extends Controller
 
         $this->validator($request->all(), $category)->validate();
 
-        $category->update($request->only(['name', 'description']));
+        $category->update($request->only(['name', 'description', 'color']));
 
         return $category;
     }

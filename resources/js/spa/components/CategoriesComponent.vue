@@ -38,6 +38,17 @@
                         </v-container>
                     </template>
 
+                    <template v-slot:item.color="{ item }">
+                        <v-btn
+                            fab
+                            x-small
+                            height="20px"
+                            width="20px"
+                            :color="item.color"
+                        >
+                        </v-btn>
+                    </template>
+
                     <template v-slot:item.actions="{ item }">
                         <v-icon
                             small
@@ -98,6 +109,7 @@ export default {
             headers: [
                 {text: 'Name', value: 'name'},
                 {text: 'Description', value: 'description'},
+                {text: 'Indicator', value: 'color'},
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
 
@@ -111,13 +123,15 @@ export default {
         postData: function (item) {
             return {
                 'name': item.name,
-                'description': item.description
+                'description': item.description,
+                'color': item.color
             }
         },
         newItemObject: function () {
             return {
                 name: '',
-                description: ''
+                description: '',
+                color: ''
             }
         },
     }

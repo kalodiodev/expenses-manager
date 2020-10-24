@@ -47,6 +47,10 @@
                         </v-row>
                     </template>
 
+                    <template v-slot:item.category="{ item }">
+                        <v-btn fab height="15px" width="15px" :color="item.category.color" class="mr-2"></v-btn> {{ item.category.name }}
+                    </template>
+
                     <template v-slot:item.actions="{ item }">
                         <v-icon
                             small
@@ -110,7 +114,7 @@
                         value: 'date',
                     },
                     {text: 'Description', value: 'description'},
-                    {text: 'Category', value: 'category.name'},
+                    {text: 'Category', value: 'category'},
                     {text: 'Cost', value: 'cost'},
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
@@ -145,6 +149,7 @@
                     'date': item.date,
                     'description': item.description,
                     'cost': item.cost,
+                    'color': item.color,
                     'category_id': item.category_id
                 }
             },
@@ -152,6 +157,7 @@
                 return {
                     date: this.editedItem.date = new Date().toISOString().substr(0,10),
                     description: '',
+                    color: '',
                     cost: '',
                     category_id: null
                 }

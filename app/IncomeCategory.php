@@ -21,8 +21,20 @@ class IncomeCategory extends Model
      */
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'color'
     ];
+
+    /**
+     * Color getter
+     *
+     * @param $color
+     * @return string
+     */
+    public function getColorAttribute($color)
+    {
+        return $color ?: '';
+    }
 
     /**
      * An expense category belongs to a user

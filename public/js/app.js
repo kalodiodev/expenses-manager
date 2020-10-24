@@ -18151,9 +18151,9 @@ try {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /mount/storage/Code/expenses-manager/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /mount/storage/Code/expenses-manager/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /mount/storage/Code/expenses-manager/resources/sass/spa.scss */"./resources/sass/spa.scss");
+__webpack_require__(/*! /Volumes/Sandisk/code/laravel/expenses-manager/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Volumes/Sandisk/code/laravel/expenses-manager/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Volumes/Sandisk/code/laravel/expenses-manager/resources/sass/spa.scss */"./resources/sass/spa.scss");
 
 
 /***/ })

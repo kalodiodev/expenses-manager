@@ -39,7 +39,7 @@ class IncomeCategoryController extends Controller
 
         return auth()->user()
             ->incomeCategories()
-            ->create($request->only(['name', 'description']));
+            ->create($request->only(['name', 'description', 'color']));
     }
 
     /**
@@ -57,7 +57,7 @@ class IncomeCategoryController extends Controller
 
         $this->validator($request->all(), $category)->validate();
 
-        $category->update($request->only(['name', 'description']));
+        $category->update($request->only(['name', 'description', 'color']));
 
         return $category;
     }

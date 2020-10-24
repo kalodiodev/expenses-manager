@@ -2188,6 +2188,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2213,6 +2224,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Description',
         value: 'description'
       }, {
+        text: 'Indicator',
+        value: 'color'
+      }, {
         text: 'Actions',
         value: 'actions',
         sortable: false
@@ -2227,13 +2241,15 @@ __webpack_require__.r(__webpack_exports__);
     postData: function postData(item) {
       return {
         'name': item.name,
-        'description': item.description
+        'description': item.description,
+        'color': item.color
       };
     },
     newItemObject: function newItemObject() {
       return {
         name: '',
-        description: ''
+        description: '',
+        color: ''
       };
     }
   }
@@ -2254,6 +2270,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators_required__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators/maxLength */ "./node_modules/vuelidate/lib/validators/maxLength.js");
 /* harmony import */ var vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators_maxLength__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2780,6 +2806,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2807,7 +2837,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'description'
       }, {
         text: 'Category',
-        value: 'category.name'
+        value: 'category'
       }, {
         text: 'Cost',
         value: 'cost'
@@ -2846,6 +2876,7 @@ __webpack_require__.r(__webpack_exports__);
         'date': item.date,
         'description': item.description,
         'cost': item.cost,
+        'color': item.color,
         'category_id': item.category_id
       };
     },
@@ -2853,6 +2884,7 @@ __webpack_require__.r(__webpack_exports__);
       return {
         date: this.editedItem.date = new Date().toISOString().substr(0, 10),
         description: '',
+        color: '',
         cost: '',
         category_id: null
       };
@@ -3161,6 +3193,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -3185,7 +3221,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'description'
       }, {
         text: 'Category',
-        value: 'category.name'
+        value: 'category'
       }, {
         text: 'Amount',
         value: 'amount'
@@ -6981,6 +7017,23 @@ var render = function() {
                     proxy: true
                   },
                   {
+                    key: "item.color",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-btn", {
+                          attrs: {
+                            fab: "",
+                            "x-small": "",
+                            height: "20px",
+                            width: "20px",
+                            color: item.color
+                          }
+                        })
+                      ]
+                    }
+                  },
+                  {
                     key: "item.actions",
                     fn: function(ref) {
                       var item = ref.item
@@ -7153,6 +7206,29 @@ var render = function() {
                                 _vm.$set(_vm.editedItem, "name", $$v)
                               },
                               expression: "editedItem.name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        [
+                          _c("v-color-picker", {
+                            attrs: {
+                              "dot-size": "25",
+                              "hide-inputs": "",
+                              "hide-mode-switch": "",
+                              mode: "hex",
+                              "swatches-max-height": "200"
+                            },
+                            model: {
+                              value: _vm.editedItem.color,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedItem, "color", $$v)
+                              },
+                              expression: "editedItem.color"
                             }
                           })
                         ],
@@ -7750,6 +7826,28 @@ var render = function() {
                     proxy: true
                   },
                   {
+                    key: "item.category",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-btn", {
+                          staticClass: "mr-2",
+                          attrs: {
+                            fab: "",
+                            height: "15px",
+                            width: "15px",
+                            color: item.category.color
+                          }
+                        }),
+                        _vm._v(
+                          " " +
+                            _vm._s(item.category.name) +
+                            "\n                "
+                        )
+                      ]
+                    }
+                  },
+                  {
                     key: "item.actions",
                     fn: function(ref) {
                       var item = ref.item
@@ -8243,6 +8341,28 @@ var render = function() {
                       ]
                     },
                     proxy: true
+                  },
+                  {
+                    key: "item.category",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-btn", {
+                          staticClass: "mr-2",
+                          attrs: {
+                            fab: "",
+                            height: "15px",
+                            width: "15px",
+                            color: item.category.color
+                          }
+                        }),
+                        _vm._v(
+                          " " +
+                            _vm._s(item.category.name) +
+                            "\n                "
+                        )
+                      ]
+                    }
                   },
                   {
                     key: "item.actions",
@@ -70348,7 +70468,7 @@ var vuetify = new vuetify__WEBPACK_IMPORTED_MODULE_1___default.a({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /mount/storage/Code/expenses-manager/resources/js/spa/app.js */"./resources/js/spa/app.js");
+module.exports = __webpack_require__(/*! /Volumes/Sandisk/code/laravel/expenses-manager/resources/js/spa/app.js */"./resources/js/spa/app.js");
 
 
 /***/ })

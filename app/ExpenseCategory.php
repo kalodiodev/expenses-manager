@@ -22,6 +22,7 @@ class ExpenseCategory extends Model
     protected $fillable = [
         'name',
         'description',
+        'color'
     ];
 
     /**
@@ -30,6 +31,17 @@ class ExpenseCategory extends Model
      * @var array
      */
     protected $hidden = ['user_id', 'created_at', 'updated_at'];
+
+    /**
+     * Color getter
+     *
+     * @param $color
+     * @return string
+     */
+    public function getColorAttribute($color)
+    {
+        return $color ?: '';
+    }
 
     /**
      * An expense category belongs to a user

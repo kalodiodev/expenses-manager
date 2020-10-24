@@ -48,6 +48,10 @@
                         </v-row>
                     </template>
 
+                    <template v-slot:item.category="{ item }">
+                        <v-btn fab height="15px" width="15px" :color="item.category.color" class="mr-2"></v-btn> {{ item.category.name }}
+                    </template>
+
                     <template v-slot:item.actions="{ item }">
                         <v-icon
                             small
@@ -108,7 +112,7 @@ export default {
                     value: 'date',
                 },
                 {text: 'Description', value: 'description'},
-                {text: 'Category', value: 'category.name'},
+                {text: 'Category', value: 'category'},
                 {text: 'Amount', value: 'amount'},
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
