@@ -2810,6 +2810,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2834,13 +2842,15 @@ __webpack_require__.r(__webpack_exports__);
         value: 'date'
       }, {
         text: 'Description',
-        value: 'description'
+        value: 'description',
+        align: 'start'
       }, {
         text: 'Category',
         value: 'category'
       }, {
         text: 'Cost',
-        value: 'cost'
+        value: 'cost',
+        align: 'end'
       }, {
         text: 'Actions',
         value: 'actions',
@@ -3197,6 +3207,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3224,7 +3242,8 @@ __webpack_require__.r(__webpack_exports__);
         value: 'category'
       }, {
         text: 'Amount',
-        value: 'amount'
+        value: 'amount',
+        align: 'end'
       }, {
         text: 'Actions',
         value: 'actions',
@@ -7826,6 +7845,19 @@ var render = function() {
                     proxy: true
                   },
                   {
+                    key: "item.date",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.$d(new Date(item.date), "short")) +
+                            "\n                "
+                        )
+                      ]
+                    }
+                  },
+                  {
                     key: "item.category",
                     fn: function(ref) {
                       var item = ref.item
@@ -7842,6 +7874,19 @@ var render = function() {
                         _vm._v(
                           " " +
                             _vm._s(item.category.name) +
+                            "\n                "
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "item.cost",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.$n(item.cost, "currency")) +
                             "\n                "
                         )
                       ]
@@ -8343,6 +8388,19 @@ var render = function() {
                     proxy: true
                   },
                   {
+                    key: "item.date",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.$d(new Date(item.date), "short")) +
+                            "\n                "
+                        )
+                      ]
+                    }
+                  },
+                  {
                     key: "item.category",
                     fn: function(ref) {
                       var item = ref.item
@@ -8359,6 +8417,19 @@ var render = function() {
                         _vm._v(
                           " " +
                             _vm._s(item.category.name) +
+                            "\n                "
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "item.amount",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.$n(item.amount, "currency")) +
                             "\n                "
                         )
                       ]
@@ -70140,6 +70211,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_i18n__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var numberFormats = {
+  "en": {
+    currency: {
+      style: "currency",
+      currency: "EUR"
+    }
+  },
+  "el": {
+    currency: {
+      style: "currency",
+      currency: "EUR"
+    }
+  }
+};
+var setDateTimeFormats = {
+  "short": {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  },
+  "long": {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minutes: "numeric"
+  }
+};
+var dateTimeFormats = {
+  en: setDateTimeFormats,
+  el: setDateTimeFormats
+};
 
 function loadLocaleMessages() {
   var locales = __webpack_require__("./resources/js/spa/locales sync recursive [A-Za-z0-9-_,\\s]+\\.json$/");
@@ -70159,7 +70262,9 @@ function loadLocaleMessages() {
 /* harmony default export */ __webpack_exports__["default"] = (new vue_i18n__WEBPACK_IMPORTED_MODULE_1__["default"]({
   locale: "en",
   fallbackLocale: "en",
-  messages: loadLocaleMessages()
+  messages: loadLocaleMessages(),
+  dateTimeFormats: dateTimeFormats,
+  numberFormats: numberFormats
 }));
 
 /***/ }),

@@ -48,8 +48,16 @@
                         </v-row>
                     </template>
 
+                    <template v-slot:item.date="{ item }">
+                        {{ $d( new Date(item.date), 'short') }}
+                    </template>
+
                     <template v-slot:item.category="{ item }">
                         <v-btn fab height="15px" width="15px" :color="item.category.color" class="mr-2"></v-btn> {{ item.category.name }}
+                    </template>
+
+                    <template v-slot:item.amount="{ item }">
+                        {{ $n(item.amount, "currency") }}
                     </template>
 
                     <template v-slot:item.actions="{ item }">
@@ -113,7 +121,7 @@ export default {
                 },
                 {text: 'Description', value: 'description'},
                 {text: 'Category', value: 'category'},
-                {text: 'Amount', value: 'amount'},
+                {text: 'Amount', value: 'amount', align: 'end'},
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
             newItemDialogTitle: 'New Income',
