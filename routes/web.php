@@ -41,5 +41,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/incomes', [IncomeController::class, 'index'])->name('incomes');
     Route::post('/incomes', [IncomeController::class, 'store']);
-    Route::delete('/incomes/{income}', [IncomeController::class, 'destroy'])->name('income');
+    Route::patch('/incomes/{income}', [IncomeController::class, 'update'])->name('income');
+    Route::delete('/incomes/{income}', [IncomeController::class, 'destroy']);
 });

@@ -43,6 +43,24 @@ class IncomeController extends Controller
     }
 
     /**
+     * Update Expense
+     *
+     * @param Income $income
+     * @param IncomeRequest $request
+     * @return Income
+     */
+    public function update(Income $income, IncomeRequest $request)
+    {
+        if ($income->user->id != auth()->user()->id) {
+            abort(404, 'Income not found.');
+        }
+
+        $income->update($request->only(['category_id', 'date', 'description', 'amount']));
+
+        return $income->fresh();
+    }
+
+    /**
      * Delete Income
      *
      * @param Income $income
