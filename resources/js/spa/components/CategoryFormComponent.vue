@@ -23,7 +23,6 @@
                                 dot-size="25"
                                 hide-inputs
                                 hide-mode-switch
-                                mode="hex"
                                 swatches-max-height="200"
                                 v-model="editedItem.color"
                             ></v-color-picker>
