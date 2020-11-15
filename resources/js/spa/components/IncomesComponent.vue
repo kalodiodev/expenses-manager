@@ -125,6 +125,7 @@ export default {
                 {text: 'Actions', value: 'actions', sortable: false},
             ],
             newItemDialogTitle: 'New Income',
+            editItemDialogTitle: 'Edit Income',
             deleteItemDialogTitle: 'Delete Income',
             deleteItemConfirmMessage: 'Are you sure you want to delete this income?',
 

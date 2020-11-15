@@ -127,6 +127,7 @@
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
                 newItemDialogTitle: 'New Expense',
+                editItemDialogTitle: 'Edit Expense',
                 deleteItemDialogTitle: 'Delete Expense',
                 deleteItemConfirmMessage: 'Are you sure you want to delete this expense?',
 

@@ -2857,6 +2857,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       newItemDialogTitle: 'New Expense',
+      editItemDialogTitle: 'Edit Expense',
       deleteItemDialogTitle: 'Delete Expense',
       deleteItemConfirmMessage: 'Are you sure you want to delete this expense?',
       categories: [],
@@ -3250,6 +3251,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       newItemDialogTitle: 'New Income',
+      editItemDialogTitle: 'Edit Income',
       deleteItemDialogTitle: 'Delete Income',
       deleteItemConfirmMessage: 'Are you sure you want to delete this income?',
       categories: [],
