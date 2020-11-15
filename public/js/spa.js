@@ -2503,7 +2503,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("/stats").then(function (res) {
+      _this.stats = res.data;
+    })["catch"](function (err) {});
+  },
+  data: function data() {
+    return {
+      stats: []
+    };
+  },
+  filters: {
+    ucWordFirst: function ucWordFirst(value) {
+      var result = "";
+      var words = value.toString().split(/[ _]+/);
+
+      for (var word in words) {
+        console.log(words[word]);
+        result += words[word].charAt(0).toUpperCase() + words[word].slice(1) + " ";
+      }
+
+      return result.trimEnd();
+    }
+  }
+});
 
 /***/ }),
 
@@ -7427,9 +7475,66 @@ var render = function() {
       _c(
         "v-row",
         [
-          _c("v-col", { staticClass: "text-center" }, [
-            _c("div", { staticClass: "text-h3" }, [_vm._v("Dashboard")])
-          ])
+          _c(
+            "v-col",
+            { staticClass: "text-center" },
+            [
+              _c("div", { staticClass: "text-h3" }, [_vm._v("Dashboard")]),
+              _vm._v(" "),
+              _c("v-simple-table", {
+                attrs: { dense: "" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function() {
+                      return [
+                        _c("thead", { staticClass: "stats-head" }, [
+                          _c("tr", [
+                            _c("th", { staticClass: "text-left" }, [
+                              _vm._v("Period")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-right" }, [
+                              _vm._v("Income")
+                            ]),
+                            _vm._v(" "),
+                            _c("th", { staticClass: "text-right" }, [
+                              _vm._v("Expenses")
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          { staticClass: "stats-body" },
+                          _vm._l(_vm.stats, function(item, period) {
+                            return _c("tr", { key: period }, [
+                              _c("td", { staticClass: "text-left" }, [
+                                _vm._v(_vm._s(_vm._f("ucWordFirst")(period)))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-right" }, [
+                                _vm._v(_vm._s(_vm.$n(item.income, "currency")))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-right" }, [
+                                _vm._v(
+                                  _vm._s(_vm.$n(item.expenses, "currency"))
+                                )
+                              ])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    },
+                    proxy: true
+                  }
+                ])
+              })
+            ],
+            1
+          )
         ],
         1
       )

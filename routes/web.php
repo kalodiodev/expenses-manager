@@ -4,6 +4,7 @@ use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeCategoryController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,4 +44,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/incomes', [IncomeController::class, 'store']);
     Route::patch('/incomes/{income}', [IncomeController::class, 'update'])->name('income');
     Route::delete('/incomes/{income}', [IncomeController::class, 'destroy']);
+
+    Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 });

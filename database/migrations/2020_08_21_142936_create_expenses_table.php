@@ -17,7 +17,7 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->constrained('expense_categories');
-            $table->dateTime("date");
+            $table->dateTime("date")->index();
             $table->string("description")->nullable();
             $table->decimal("cost");
             $table->timestamps();
